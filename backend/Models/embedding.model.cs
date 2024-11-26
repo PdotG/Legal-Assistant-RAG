@@ -17,7 +17,8 @@ namespace backend.Models
         [ForeignKey("FileId")]
         public File? File { get; set; }
 
-        [Column("embedding")]
+        //[Column("embedding")]
+        [NotMapped]
         public float[]? Vector { get; set; }
 
         [Column("chunk_index")]
