@@ -1,24 +1,27 @@
-
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
-    public class User 
+    [Table("users")]
+    public class User
     {
+        [Key]
+        [Column("id_user")]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(255)]
+        [Column("name")]
         public required string Name { get; set; }
 
         [Required]
-        [EmailAddress]
+        [Column("email")]
         public required string Email { get; set; }
-        
+
         [Required]
-        [MinLength(12)]
-        [MaxLength(24)]
+        [Column("password")]
         public required string Password { get; set; }
 
+        public ICollection<File>? Files { get; set; }
     }
 }
