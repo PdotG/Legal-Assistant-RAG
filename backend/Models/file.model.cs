@@ -17,8 +17,16 @@ namespace backend.Models
         [ForeignKey("UserId")]
         public User? User { get; set; }
 
+        [Required]
+        [Column("name")]
+        public required string Name { get; set; }
+
         [Column("scraped_at")]
         public DateTime ScrapedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        [Column("content")]
+        public required byte[] Content { get; set; }
 
         public ICollection<Embedding>? Embeddings { get; set; }
     }

@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Models
 {
     [Table("users")]
+    [Index(nameof(Email), IsUnique = true)]
     public class User
     {
         [Key]

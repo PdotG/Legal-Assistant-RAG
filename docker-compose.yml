@@ -1,17 +1,17 @@
-name: "legal-assistant-rag"
+version: '3.8'  # Agrega una versión de compose
 services:
   lar-db:
     hostname: db
     image: pgvector/pgvector:0.6.0-pg12
     ports:
-     - 5432:5432
+      - 5432:5432
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-     - ./backend/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-     - postgres-data:/var/lib/postgresql/data
+      - ./backend/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
   postgres-data:
