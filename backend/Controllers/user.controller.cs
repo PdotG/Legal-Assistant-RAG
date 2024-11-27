@@ -43,10 +43,11 @@ namespace backend.Controllers
         public async Task<ActionResult<UserDto>> Create(UserDto UserDto)
         {
             var user = _mapper.Map<User>(UserDto);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             await _repository.AddAsync(user);
-            
+
             var userDto = _mapper.Map<UserDto>(user);
-            return CreatedAtAction(nameof(GetById), new { id = userDto.Id }, userDto);
+            return Created();
         }
 
         [HttpPut("{id}")]
