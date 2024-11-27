@@ -24,6 +24,7 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
         {
             var users = await _repository.GetAllAsync();
+            Console.WriteLine(users);
             var usersDto = _mapper.Map<IEnumerable<UserDto>>(users);
             return Ok(usersDto);
         }
@@ -57,19 +58,19 @@ namespace backend.Controllers
                 return NotFound();
 
             _mapper.Map(UserDto, existingUser);
-            await _repository.UpdateAsync(existingUser);
+            _repository.Update(existingUser);
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(UserDto UserDto)
         {
-            var user = await _repository.GetByIdAsync(id);
+            var user = await _repository.GetByIdAsync(UserDto.Id);
             if (user == null)
                 return NotFound();
-
-            await _repository.DeleteAsync(id);
+            _ = _mapper.Map<User>(UserDto);
+            _repository.Delete(user);
             return NoContent();
         }
     }
