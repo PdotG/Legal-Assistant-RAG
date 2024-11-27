@@ -1,31 +1,34 @@
-using backend.Data;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
+using System.Text;
+using backend.Data;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Verificar la carga de la configuración
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-var connectionString = builder.Configuration.GetConnectionString("WebApiDatabase");
-
-if (string.IsNullOrEmpty(connectionString))
+internal class Program
 {
-    Console.WriteLine("Error: No se encontró la cadena de conexión.");
-    return;
-}
-else
-{
-    Console.WriteLine($"Cadena de conexión encontrada: {connectionString}");
-}
+    private static void Main(string[] args)
+    {
+        // Entry point of the application
+        var builder = WebApplication.CreateBuilder(args);
 
-try
-{
-    using var connection = new NpgsqlConnection(connectionString);
-    connection.Open();
-    Console.WriteLine("Conexión exitosa con la base de datos.");
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"Error al conectar con la base de datos: {ex.Message}");
+        // Adding services to the controller
+        builder.Services.AddControllers();
+
+        builder.Services.AddEndpointsApiExplorer();
+
+        // Database Services
+        builder.Services.AddDbContext<MyDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")));
+
+        // Build the web application
+        var app = builder.Build();
+
+        // Configure the HTTP Pipeline
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.MapControllers();
+
+        // Start the application
+        app.Run();
+    }
 }

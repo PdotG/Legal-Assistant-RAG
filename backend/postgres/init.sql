@@ -7,7 +7,7 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE TABLE users (
     id_user SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    email TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL
 );
 
@@ -15,6 +15,8 @@ CREATE TABLE users (
 CREATE TABLE files (
     id_file SERIAL PRIMARY KEY,
     id_user INTEGER NOT NULL REFERENCES users(id_user) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    content bytea NOT NULL,
     scraped_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
