@@ -24,7 +24,6 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
         {
             var users = await _repository.GetAllAsync();
-            Console.WriteLine(users);
             var usersDto = _mapper.Map<IEnumerable<UserDto>>(users);
             return Ok(usersDto);
         }
@@ -45,7 +44,7 @@ namespace backend.Controllers
         {
             var user = _mapper.Map<User>(UserDto);
             await _repository.AddAsync(user);
-
+            
             var userDto = _mapper.Map<UserDto>(user);
             return CreatedAtAction(nameof(GetById), new { id = userDto.Id }, userDto);
         }

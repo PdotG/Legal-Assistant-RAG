@@ -22,16 +22,19 @@ namespace backend.Data.Repositories
         {
             Console.WriteLine(entity.GetType());
             await _dbSet.AddAsync(entity);
+            await SaveChangesAsync();
         }
 
         public void Update(T entity)
         {
             _dbSet.Update(entity);
+            SaveChangesAsync().Wait();
         }
 
         public void Delete(T entity)
         {
             _dbSet.Remove(entity);
+            SaveChangesAsync().Wait();
         }
 
         public async Task SaveChangesAsync()
