@@ -36,8 +36,6 @@ namespace backend.Data
             // Ignorar la propiedad Vector para que no sea mapeada automáticamente
             modelBuilder.Entity<Embedding>().Ignore(e => e.Vector);
         }
-
-        // Método para agregar un Embedding con SQL crudo
         
     }
 }

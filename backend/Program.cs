@@ -47,5 +47,16 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
+try
+{
+    using var connection = new NpgsqlConnection(connectionString);
+    connection.Open();
+    Console.WriteLine("Conexión exitosa con la base de datos.");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error al conectar con la base de datos: {ex.Message}");
+}
+
 // Start the application
 app.Run("http://localhost:3000");
