@@ -67,29 +67,31 @@ namespace backend.Controllers
             }
         }
 
-
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UserDto UserDto)
+        public async Task<IActionResult> Update(int id, UserDto userDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var existingUser = await _repository.GetByIdAsync(id);
             if (existingUser == null)
                 return NotFound();
-
-            _mapper.Map(UserDto, existingUser);
-            _repository.Update(existingUser);
+            
+            userDto.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
+            _mapper.Map(userDto, existingUser);
+            await _repository.UpdateAsync(existingUser);
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(UserDto UserDto)
+        public async Task<IActionResult> Delete(int id)
         {
-            var user = await _repository.GetByIdAsync(UserDto.Id);
+            var user = await _repository.GetByIdAsync(id);
             if (user == null)
                 return NotFound();
-            _ = _mapper.Map<User>(UserDto);
-            _repository.Delete(user);
+            
+            await _repository.Delete(user);
             return NoContent();
         }
     }
