@@ -20,7 +20,6 @@ namespace backend.Data.Repositories
 
         public async Task AddAsync(T entity)
         {
-            Console.WriteLine(entity.GetType());
             await _dbSet.AddAsync(entity);
             await SaveChangesAsync();
         }

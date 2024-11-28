@@ -1,5 +1,6 @@
 using backend.Data;
 using backend.Data.Repositories;
+using backend.Filters;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -28,7 +29,13 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<IEmbeddingRepository, EmbeddingRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddControllers();
+
+// Registrar filtros globales
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>(); // Registro del filtro personalizado
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
 // Build the web application

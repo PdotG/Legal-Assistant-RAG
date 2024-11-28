@@ -4,6 +4,8 @@ using backend.Data.Repositories;
 using backend.Dtos;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace backend.Controllers
 {
@@ -40,15 +42,32 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDto>> Create(UserDto UserDto)
+        public async Task<IActionResult> Create(UserDto UserDto)
         {
-            var user = _mapper.Map<User>(UserDto);
-            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            await _repository.AddAsync(user);
+            try
+            {
+                var user = _mapper.Map<User>(UserDto);
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                await _repository.AddAsync(user);
 
-            var userDto = _mapper.Map<UserDto>(user);
-            return Created();
+                return CreatedAtAction(nameof(Create), new { id = user.Id }, new { message = "User created successfully" });
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException?.Message.Contains("unique") ?? false)
+                {
+                    return Conflict(new { message = "The email address is already in use." });
+                }
+
+                return StatusCode(500, new { message = "An error occurred while saving to the database." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An unexpected error occurred.", details = ex.Message });
+            }
         }
+
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UserDto UserDto)
