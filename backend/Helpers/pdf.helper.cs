@@ -137,7 +137,7 @@ namespace backend.Helpers
 
         public string SaveFile(IFormFile file)
         {
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
             var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 

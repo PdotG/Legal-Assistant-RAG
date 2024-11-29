@@ -13,5 +13,10 @@ namespace backend.Data.Repositories
                 .Include(u => u.Files) // Incluye la relación con Files
                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
+
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await _dbSet.FirstOrDefaultAsync(u => u.Email == email);
+        }
     }
 }

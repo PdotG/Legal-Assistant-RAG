@@ -3,6 +3,7 @@ using backend.Data;
 using backend.Data.Repositories;
 using backend.Dtos;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/users")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly UserRepository _repository;
@@ -42,6 +44,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Create(UserDto UserDto)
         {
             try

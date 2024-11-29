@@ -8,7 +8,7 @@ namespace backend.Dtos
 
         public DateTime ScrapedAt { get; set; }
 
-        public required byte[] Content { get; set; }
+        public required string FilePath { get; set; }
 
         public ICollection<EmbeddingDto>? Embeddings { get; set; }
     }
