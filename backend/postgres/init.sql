@@ -16,7 +16,7 @@ CREATE TABLE files (
     id_file SERIAL PRIMARY KEY,
     id_user INTEGER NOT NULL REFERENCES users(id_user) ON DELETE CASCADE,
     name TEXT NOT NULL,
-    content bytea NOT NULL,
+    file_path TEXT NOT NULL,
     scraped_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

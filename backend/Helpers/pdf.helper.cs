@@ -7,24 +7,53 @@ using OpenAI;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using OpenAI.Embeddings;
+using backend.Data.Repositories;
 
 namespace backend.Helpers
 {
     public class PdfHelper
     {
         private readonly OpenAIClient _openAiClient;
+        private readonly EmbeddingRepository _repository;
+        private readonly EmbeddingClient _embeddingClient;
         private const int BatchSize = 100;
         private const int ChunkSize = 1000; // Characters per chunk
 
-        public PdfHelper(OpenAIClient openAiClient)
+        public PdfHelper(OpenAIClient openAiClient, EmbeddingRepository repository)
         {
             _openAiClient = openAiClient;
+            _repository = repository;
+            _embeddingClient = new EmbeddingClient("text-embedding-3-small", Environment.GetEnvironmentVariable("OPENAI_API_KEY"));
         }
 
         public async Task ProcessPdfAsync(string filePath, int fileId)
         {
             List<string> chunks = new List<string>();
             using (var document = PdfDocument.Open(filePath))
+            {
+                foreach (var page in document.GetPages())
+                {
+                    string pageText = page.Text;
+                    List<string> pageChunks = ChunkText(pageText, ChunkSize);
+                    chunks.AddRange(pageChunks);
+                    if (chunks.Count >= BatchSize)
+                    {
+                        await ProcessBatch(chunks, fileId);
+                        chunks.Clear();
+                    }
+                }
+                if (chunks.Count > 0)
+                {
+                    await ProcessBatch(chunks, fileId);
+                }
+            }
+        }
+
+        public async Task ProcessPdfAsync(byte[] fileContent, int fileId)
+        {
+            List<string> chunks = new List<string>();
+            using (var stream = new MemoryStream(fileContent))
+            using (var document = PdfDocument.Open(stream))
             {
                 foreach (var page in document.GetPages())
                 {
@@ -56,32 +85,68 @@ namespace backend.Helpers
 
         private async Task ProcessBatch(List<string> chunks, int fileId)
         {
-            EmbeddingClient client = new("text-embedding-3-small", Environment.GetEnvironmentVariable("OPENAI_API_KEY"));
-
             List<Embedding> embeddingsToSave = new List<Embedding>();
+            int maxRetries = 3;
 
-            foreach (var chunk in chunks)
+            for (int index = 0; index < chunks.Count; index++)
             {
-                OpenAIEmbedding embedding = client.GenerateEmbedding(chunk);
+                var chunk = chunks[index];
+                int retryCount = 0;
+                bool success = false;
 
-                // https://www.nuget.org/packages/OpenAI#how-to-generate-text-embeddings docs
-                
-                ReadOnlyMemory<float> vector = embedding.ToFloats();
-
-                Embedding embeddingToSave = new Embedding
+                while (!success && retryCount < maxRetries)
                 {
-                    FileId = fileId,
-                    Vector = vector.ToArray(),
-                    PlainText = chunk,
-                    CreatedAt = DateTime.UtcNow
-                };
+                    try
+                    {
+                        OpenAIEmbedding embedding = await _embeddingClient.GenerateEmbeddingAsync(chunk);
+                        ReadOnlyMemory<float> vector = embedding.ToFloats();
 
-                embeddingsToSave.Add(embeddingToSave);
+                        Embedding embeddingToSave = new Embedding
+                        {
+                            FileId = fileId,
+                            ChunkIndex = index,
+                            Vector = vector.ToArray(),
+                            PlainText = chunk,
+                            CreatedAt = DateTime.UtcNow
+                        };
+
+                        embeddingsToSave.Add(embeddingToSave);
+                        success = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        retryCount++;
+                        if (retryCount >= maxRetries)
+                        {
+                            Console.WriteLine($"Error generating embedding for chunk {index} after {maxRetries} attempts: {ex.Message}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Retrying chunk {index}, attempt {retryCount + 1}/{maxRetries}");
+                            await Task.Delay(1000); // Esperar un segundo antes de reintentar
+                        }
+                    }
+                }
             }
 
-            // Save embeddingsToSave to your storage system
-            //await SaveEmbeddingsAsync(embeddingsToSave);
+            if (embeddingsToSave.Count > 0)
+            {
+                await _repository.SaveEmbeddingsAsync(embeddingsToSave);
+            }
         }
 
+        public string SaveFile(IFormFile file)
+        {
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
+
+            return filePath;
+        }
     }
 }

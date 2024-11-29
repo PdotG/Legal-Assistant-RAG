@@ -25,8 +25,8 @@ namespace backend.Models
         public DateTime ScrapedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        [Column("content")]
-        public required byte[] Content { get; set; }
+        [Column("file_path")]
+        public required string FilePath { get; set; }
 
         public ICollection<Embedding>? Embeddings { get; set; }
     }

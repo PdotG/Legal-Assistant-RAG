@@ -78,5 +78,12 @@ namespace backend.Data.Repositories
             return embeddings;
         }
 
+        public async Task SaveEmbeddingsAsync(List<Embedding> embeddings)
+        {
+            _context.Embeddings.AddRange(embeddings);
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }
