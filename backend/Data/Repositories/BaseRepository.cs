@@ -20,7 +20,6 @@ namespace backend.Data.Repositories
 
         public async Task AddAsync(T entity)
         {
-            Console.WriteLine(entity.GetType());
             await _dbSet.AddAsync(entity);
             await SaveChangesAsync();
         }
@@ -31,10 +30,16 @@ namespace backend.Data.Repositories
             SaveChangesAsync().Wait();
         }
 
-        public void Delete(T entity)
+        public async Task UpdateAsync(T entity)
+        {
+            _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Delete(T entity)
         {
             _dbSet.Remove(entity);
-            SaveChangesAsync().Wait();
+            await _context.SaveChangesAsync();
         }
 
         public async Task SaveChangesAsync()
