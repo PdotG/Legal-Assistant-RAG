@@ -36,6 +36,12 @@ builder.Services.AddScoped<EmbeddingRepository>();
 builder.Services.AddScoped<IEmbeddingRepository, EmbeddingRepository>();
 builder.Services.AddScoped<FileRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
+builder.Services.AddScoped<ClientRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<CaseRepository>();
+builder.Services.AddScoped<ICaseRepository, CaseRepository>();
+builder.Services.AddScoped<DocumentRepository>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
 builder.Services.AddTransient<PdfHelper>();
 builder.Services.AddSingleton(sp => new OpenAIClient(builder.Configuration["OpenAI:OPENAI_API_KEY"]));
