@@ -23,7 +23,7 @@ public class Document
     public DateTime UploadedDate { get; set; } = DateTime.UtcNow;
 
     [ForeignKey("Case")]
-    [Column("case_id")]
+    [Column("id_case")]
     public int CaseId { get; set; }
 
     public Case? Case { get; set; }

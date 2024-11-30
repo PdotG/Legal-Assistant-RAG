@@ -47,9 +47,9 @@ CREATE TABLE cases (
     status TEXT CHECK (status IN ('Open', 'Closed', 'Pending')) DEFAULT 'Open',
     assigned_user_id INTEGER REFERENCES users(id_user) ON DELETE SET NULL,
     client_id INTEGER NOT NULL REFERENCES clients(id_client) ON DELETE CASCADE,
-    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    court_date TIMESTAMP
+    created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    court_date TIMESTAMP WITH TIME ZONE
 );
 
 -- Table for Documents
@@ -59,5 +59,5 @@ CREATE TABLE documents (
     title TEXT NOT NULL,
     description TEXT,
     file_id INTEGER NOT NULL REFERENCES files(id_file) ON DELETE CASCADE,
-    uploaded_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    uploaded_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
