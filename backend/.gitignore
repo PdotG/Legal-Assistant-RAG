@@ -175,3 +175,6 @@ Properties/
 # App settings file
 appsettings.json
 appsettings.Development.json
+
+# Uploads
+Uploads/

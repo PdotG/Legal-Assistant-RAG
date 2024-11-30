@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,14 +38,16 @@ builder.Services.AddScoped<FileRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
 
 builder.Services.AddTransient<PdfHelper>();
+builder.Services.AddSingleton(sp => new OpenAIClient(builder.Configuration["OpenAI:OPENAI_API_KEY"]));
 
 builder.Services.AddAutoMapper(typeof(Program));
 
 // Registrar filtros globales
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<GlobalExceptionFilter>(); // Registro del filtro personalizado
-});
+// builder.Services.AddControllers(options =>
+// {
+//     options.Filters.Add<GlobalExceptionFilter>(); // Registro del filtro personalizado
+// });
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 

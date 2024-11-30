@@ -23,7 +23,7 @@ namespace backend.Helpers
         {
             _openAiClient = openAiClient;
             _repository = repository;
-            _embeddingClient = new EmbeddingClient("text-embedding-3-small", Environment.GetEnvironmentVariable("OPENAI_API_KEY"));
+            _embeddingClient = new EmbeddingClient("text-embedding-3-small", "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");
         }
 
         public async Task ProcessPdfAsync(string filePath, int fileId)
