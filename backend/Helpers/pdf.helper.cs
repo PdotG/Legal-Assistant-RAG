@@ -19,11 +19,12 @@ namespace backend.Helpers
         private const int BatchSize = 100;
         private const int ChunkSize = 1000; // Tamaño máximo por chunk
 
-        public PdfHelper(OpenAIClient openAiClient, EmbeddingRepository repository)
+        public PdfHelper(OpenAIClient openAiClient, EmbeddingRepository repository, IConfiguration configuration)
         {
             _openAiClient = openAiClient;
             _repository = repository;
-            _embeddingClient = new EmbeddingClient("text-embedding-3-small", "your-api-key");
+            var apiKey = configuration.GetSection("OpenAI:OPENAI_API_KEY").Value;
+            _embeddingClient = new EmbeddingClient("text-embedding-3-small", apiKey);
         }
 
         public async Task ProcessPdfAsync(string filePath, int fileId)
