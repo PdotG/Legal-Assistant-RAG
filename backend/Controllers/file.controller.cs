@@ -76,7 +76,7 @@ namespace backend.Controllers
                 await _repository.AddAsync(fileEntity);
 
 
-                await _pdfHelper.ProcessPdfAsync(filePath, fileEntity.Id);
+                await _pdfHelper.ProcessPdfAsync(filePath, fileEntity.Id); // Procesar el archivo PDF
 
                 return Ok(new 
                 { 

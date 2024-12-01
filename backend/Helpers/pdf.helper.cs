@@ -17,13 +17,13 @@ namespace backend.Helpers
         private readonly EmbeddingRepository _repository;
         private readonly EmbeddingClient _embeddingClient;
         private const int BatchSize = 100;
-        private const int ChunkSize = 1000; // Characters per chunk
+        private const int ChunkSize = 1000; // Tamaño máximo por chunk
 
         public PdfHelper(OpenAIClient openAiClient, EmbeddingRepository repository)
         {
             _openAiClient = openAiClient;
             _repository = repository;
-            _embeddingClient = new EmbeddingClient("text-embedding-3-small", "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");
+            _embeddingClient = new EmbeddingClient("text-embedding-3-small", "your-api-key");
         }
 
         public async Task ProcessPdfAsync(string filePath, int fileId)
@@ -34,29 +34,35 @@ namespace backend.Helpers
                 foreach (var page in document.GetPages())
                 {
                     string pageText = page.Text;
-                    List<string> pageChunks = ChunkText(pageText, ChunkSize);
-                    Console.Write(pageChunks);
-                    chunks.AddRange(pageChunks);
-                    if (chunks.Count >= BatchSize)
+                    if (pageText.Length <= ChunkSize)
                     {
-                        //await ProcessBatch(chunks, fileId);
-                        chunks.Clear();
+                        chunks.Add(pageText);
+                    }
+                    else
+                    {
+                        List<string> pageChunks = ChunkText(pageText, ChunkSize);
+                        chunks.AddRange(pageChunks);
                     }
                 }
-                if (chunks.Count > 0)
-                {
-                    await ProcessBatch(chunks, fileId);
-                }
+            }
+
+            // Process chunks in batches
+            for (int i = 0; i < chunks.Count; i += BatchSize)
+            {
+                var batchChunks = chunks.Skip(i).Take(BatchSize).ToList();
+                await ProcessBatch(batchChunks, fileId);
             }
         }
-
 
         private List<string> ChunkText(string text, int chunkSize)
         {
             List<string> chunks = new List<string>();
-            for (int i = 0; i < text.Length; i += chunkSize)
+            int offset = 0;
+            while (offset < text.Length)
             {
-                chunks.Add(text.Substring(i, Math.Min(chunkSize, text.Length - i)));
+                int length = Math.Min(chunkSize, text.Length - offset);
+                chunks.Add(text.Substring(offset, length));
+                offset += length;
             }
             return chunks;
         }
@@ -101,7 +107,7 @@ namespace backend.Helpers
                         else
                         {
                             Console.WriteLine($"Retrying chunk {index}, attempt {retryCount + 1}/{maxRetries}");
-                            await Task.Delay(1000); // Esperar un segundo antes de reintentar
+                            await Task.Delay(1000);
                         }
                     }
                 }
@@ -115,7 +121,11 @@ namespace backend.Helpers
 
         public string SaveFile(IFormFile file)
         {
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+            var uploadsFolder = Path.Combine("Uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
             var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
