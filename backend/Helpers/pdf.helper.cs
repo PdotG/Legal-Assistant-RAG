@@ -35,10 +35,11 @@ namespace backend.Helpers
                 {
                     string pageText = page.Text;
                     List<string> pageChunks = ChunkText(pageText, ChunkSize);
+                    Console.Write(pageChunks);
                     chunks.AddRange(pageChunks);
                     if (chunks.Count >= BatchSize)
                     {
-                        await ProcessBatch(chunks, fileId);
+                        //await ProcessBatch(chunks, fileId);
                         chunks.Clear();
                     }
                 }
@@ -49,29 +50,6 @@ namespace backend.Helpers
             }
         }
 
-        public async Task ProcessPdfAsync(byte[] fileContent, int fileId)
-        {
-            List<string> chunks = new List<string>();
-            using (var stream = new MemoryStream(fileContent))
-            using (var document = PdfDocument.Open(stream))
-            {
-                foreach (var page in document.GetPages())
-                {
-                    string pageText = page.Text;
-                    List<string> pageChunks = ChunkText(pageText, ChunkSize);
-                    chunks.AddRange(pageChunks);
-                    if (chunks.Count >= BatchSize)
-                    {
-                        await ProcessBatch(chunks, fileId);
-                        chunks.Clear();
-                    }
-                }
-                if (chunks.Count > 0)
-                {
-                    await ProcessBatch(chunks, fileId);
-                }
-            }
-        }
 
         private List<string> ChunkText(string text, int chunkSize)
         {

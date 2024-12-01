@@ -75,6 +75,9 @@ namespace backend.Controllers
 
                 await _repository.AddAsync(fileEntity);
 
+
+                await _pdfHelper.ProcessPdfAsync(filePath, fileEntity.Id);
+
                 return Ok(new 
                 { 
                     fileEntity.Id, 
@@ -90,7 +93,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{name}")]
-        public async Task<IActionResult> Detele(string name)
+        public async Task<IActionResult> Delete(string name)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
