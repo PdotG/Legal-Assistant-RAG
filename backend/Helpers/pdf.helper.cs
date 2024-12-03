@@ -86,6 +86,14 @@ namespace backend.Helpers
                         OpenAIEmbedding embedding = await _embeddingClient.GenerateEmbeddingAsync(chunk);
                         ReadOnlyMemory<float> vector = embedding.ToFloats();
 
+                        // Convierte a un arreglo
+                        float[] array = vector.ToArray();
+
+                        for (var i = 0; i < array.Length; i++)
+                        {
+                            Console.WriteLine($"{i} EMBEDDING: {array[i]}");
+                        }
+
                         Embedding embeddingToSave = new Embedding
                         {
                             FileId = fileId,
@@ -116,7 +124,9 @@ namespace backend.Helpers
 
             if (embeddingsToSave.Count > 0)
             {
-                await _repository.SaveEmbeddingsAsync(embeddingsToSave);
+                foreach(var embedding in embeddingsToSave){
+                    await _repository.AddEmbeddingAsync(embedding);
+                }
             }
         }
 
