@@ -44,6 +44,7 @@ builder.Services.AddScoped<DocumentRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
 builder.Services.AddTransient<PdfHelper>();
+builder.Services.AddTransient<EmbeddingsHelper>();
 builder.Services.AddSingleton(sp => new OpenAIClient(builder.Configuration["OpenAI:OPENAI_API_KEY"]));
 
 builder.Services.AddAutoMapper(typeof(Program));

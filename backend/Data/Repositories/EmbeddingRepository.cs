@@ -1,20 +1,23 @@
+using System.Text.Json;
+using backend.Dtos;
+using backend.Helpers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using NpgsqlTypes;
+using OpenAI;
+using OpenAI.Embeddings;
 
 namespace backend.Data.Repositories
 {
     public class EmbeddingRepository : BaseRepository<Embedding>, IEmbeddingRepository
     {
-        public EmbeddingRepository(MyDbContext context) : base(context) { }
+        private readonly EmbeddingsHelper _embeddingsHelper;
 
-        // public async Task<IEnumerable<Embedding>> GetEmbeddingsByFileIdAsync(int fileId)
-        // {
-        //     return await _dbSet
-        //         .Where(e => e.FileId == fileId)
-        //         .ToListAsync();
-        // }
-
+        public EmbeddingRepository(MyDbContext context, EmbeddingsHelper embeddingsHelper) : base(context)
+        {
+            _embeddingsHelper = embeddingsHelper;
+        }
 
         public async Task AddEmbeddingAsync(Embedding embedding)
         {
@@ -84,6 +87,52 @@ namespace backend.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<EmbeddingChunk>> SearchChunksAsync(string inputMessage, int fileId, int n = 1)
+        {
+            var vectorizedContent = await _embeddingsHelper.GenerateEmbeddingsFromStringAsync(inputMessage);
+            var embeddingVector = vectorizedContent.SelectMany(innerArray => innerArray).ToArray();
+
+
+            // Consulta a la base de datos para encontrar los embeddings más cercanos
+            var sql = @"
+                SELECT 
+                    embeddings.plain_text,
+                    1 - (embeddings.embedding <=> @embedding) AS cosine_similarity
+                FROM embeddings
+                WHERE id_file = @fileId
+                ORDER BY cosine_similarity DESC
+                LIMIT @limit";
+
+            var parameters = new[]
+            {
+                new NpgsqlParameter("@embedding", NpgsqlDbType.Array | NpgsqlDbType.Real) { Value = embeddingVector },
+                new NpgsqlParameter("@fileId", fileId),
+                new NpgsqlParameter("@limit", n)
+        };
+
+            var results = new List<EmbeddingChunk>();
+
+            await using var connection = (NpgsqlConnection)_context.Database.GetDbConnection();
+            await connection.OpenAsync();
+
+            await using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddRange(parameters);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                results.Add(new EmbeddingChunk
+                {
+                    PlainText = reader.GetString(0),
+                    CosineSimilarity = reader.GetFloat(1)
+                });
+            }
+
+            return results;
+        }
 
     }
+
+
 }
+
