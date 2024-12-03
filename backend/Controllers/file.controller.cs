@@ -88,7 +88,7 @@ namespace backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocurrió un error al subir el archivo.");
+                return StatusCode(500, "Ocurrió un error al subir el archivo: " +ex);
             }
         }
 
