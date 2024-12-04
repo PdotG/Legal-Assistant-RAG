@@ -26,7 +26,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("ask")]
-        public async Task<IActionResult> AskGPT([FromBody] ChatRequestDto request)
+        public async Task AskGPT([FromBody] ChatRequestDto request)
         {
             try
             {
@@ -35,7 +35,9 @@ namespace backend.Controllers
 
                 if (sortedChunks.Count == 0)
                 {
-                    return NotFound(new { Message = "No se encontraron resultados relevantes." });
+                    Response.StatusCode = 404; // Establecer código 404
+                    await Response.Body.WriteAsync(System.Text.Encoding.UTF8.GetBytes("No se encontraron resultados relevantes.\n"));
+                    return; // Finalizar el método
                 }
 
                 var bestMatch = sortedChunks[0];
@@ -47,13 +49,13 @@ namespace backend.Controllers
                     ? $"Actúa como un asistente legal llamado RAG Assistant. La pregunta es: {request.Message}. No se ha encontrado una respuesta adecuada en la información almacenada."
                     : $"Actúa como un asistente legal llamado RAG Assistant. La pregunta es: {request.Message}. La respuesta: {answer}. Responde a la pregunta con la respuesta que se te ha proporcionado.";
 
+                // Configura el tipo de contenido para el streaming
+                Response.ContentType = "text/event-stream";
 
                 // Obtener las respuestas de manera incremental usando streaming
-                var chatResponseStream = _chatClient.CompleteChatStreamingAsync(prompt);
+                var chatResponseStream = _chatClient.CompleteChatStreaming(prompt);
 
-                // Transmitir el flujo al cliente
-                Response.ContentType = "text/event-stream";
-                await foreach (var update in chatResponseStream)
+                foreach (var update in chatResponseStream)
                 {
                     if (update.ContentUpdate.Count > 0)
                     {
@@ -62,14 +64,21 @@ namespace backend.Controllers
                         await Response.Body.FlushAsync();
                     }
                 }
-
-                return Ok();
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"Error: {ex.Message}");
-                return StatusCode(500, new { Error = ex.Message });
+                // Manejar errores durante el flujo
+                if (!Response.HasStarted)
+                {
+                    Response.StatusCode = 500;
+                    await Response.Body.WriteAsync(System.Text.Encoding.UTF8.GetBytes($"Error: {ex.Message}\n"));
+                }
+                else
+                {
+                    Console.Error.WriteLine($"Error durante la transmisión: {ex.Message}");
+                }
             }
         }
+
     }
 }

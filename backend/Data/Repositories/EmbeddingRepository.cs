@@ -95,13 +95,13 @@ namespace backend.Data.Repositories
 
             // Consulta a la base de datos para encontrar los embeddings más cercanos
             var sql = @"
-                SELECT 
-                    embeddings.plain_text,
-                    1 - (embeddings.embedding <=> @embedding) AS cosine_similarity
-                FROM embeddings
-                WHERE id_file = @fileId
-                ORDER BY cosine_similarity DESC
-                LIMIT @limit";
+    SELECT 
+        embeddings.plain_text,
+        1 - (embeddings.embedding <=> (@embedding::vector)) AS cosine_similarity
+    FROM embeddings
+    WHERE id_file = @fileId
+    ORDER BY cosine_similarity DESC
+    LIMIT @limit";
 
             var parameters = new[]
             {
