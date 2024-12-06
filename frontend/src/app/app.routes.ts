@@ -3,6 +3,7 @@ import { LoginComponent } from './features/login/pages/login.component';
 import { HomeComponent } from './shared/ui/home/home.component';
 import { NotFoundComponent } from './shared/ui/not-found/not-found.component';
 import { RegisterComponent } from './features/register/pages/register.component';
+import { AuthGuard } from './core/guards/auth.guard';
 // Importa otros componentes según sea necesario
 
 export const routes: Routes = [
@@ -13,7 +14,7 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent },
       // Agrega más rutas hijas aquí si es necesario
       // Ejemplo:
-      { path: 'register', component: RegisterComponent },
+      { path: 'register', component: RegisterComponent, canActivate: [AuthGuard]},
       // { path: 'user', component: UserComponent },
       // { path: 'documents', component: DocumentsComponent },
       // { path: 'cases', component: CasesComponent },

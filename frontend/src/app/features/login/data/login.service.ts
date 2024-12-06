@@ -13,7 +13,7 @@ export class LoginService {
 
   login(email: string, password: string): Observable<any> {
     return this.http
-      .post<any>(`${this.apiUrl}/api/login`, { email, password })
+      .post<any>(`${this.apiUrl}/api/auth/login`, { email, password })
       .pipe(
         tap((response) => {
           if (response.token) {

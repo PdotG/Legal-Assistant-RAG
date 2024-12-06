@@ -27,7 +27,7 @@ export class LoginComponent {
       this.loginService.login(this.user.email, this.user.password).subscribe(
         (response) => {
           console.log('Login exitoso:', response);
-          this.router.navigate(['/home']);
+          this.router.navigate(['/']);
         },
         (error) => {
           console.error('Error en el login:', error);
