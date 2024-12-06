@@ -1,38 +1,38 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { LoginService } from '../data/login.service'; // Asegúrate de que la ruta sea correcta
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Login } from '../data/login';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [ FormsModule]
+  imports: [FormsModule, CommonModule],
 })
 export class LoginComponent {
-
   showPassword: boolean = false;
 
   user: Login = {
     email: '',
-    password: ''
+    password: '',
   };
 
+  constructor(private loginService: LoginService, private router: Router) {}
 
   onSubmit(form: NgForm) {
     if (form.valid) {
-      // Aquí puedes implementar la lógica de login,
-      // por ejemplo, llamar a un servicio que valide al usuario.
-      console.log('Datos del formulario:', form.value);
-      console.log('Email:', this.user.email);
-      console.log('Password:', this.user.password);
-
-      // Ejemplo de lógica (ficticia)
-      // this.authService.login(this.email, this.password)
-      //   .subscribe(response => {
-      //     // Manejar respuesta de login
-      //   });
-
+      this.loginService.login(this.user.email, this.user.password).subscribe(
+        (response) => {
+          console.log('Login exitoso:', response);
+          this.router.navigate(['/home']);
+        },
+        (error) => {
+          console.error('Error en el login:', error);
+        }
+      );
     } else {
       console.log('El formulario no es válido.');
     }
