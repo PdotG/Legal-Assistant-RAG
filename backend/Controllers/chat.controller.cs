@@ -54,7 +54,7 @@ namespace backend.Controllers
                 string? answer = bestMatch.CosineSimilarity > 0.25
                     ? bestMatch.PlainText.Replace("\n", " ").Replace("\t", " ").Replace("¶", "").Trim()
                     : null;
-
+                
                 string prompt = string.IsNullOrEmpty(answer)
                     ? $"Actúa como un asistente legal llamado RAG Assistant. La pregunta es: {request.Message}. No se ha encontrado una respuesta adecuada en la información almacenada."
                     : $"Actúa como un asistente legal llamado RAG Assistant. La pregunta es: {request.Message}. La respuesta: {answer}. Responde a la pregunta con la respuesta que se te ha proporcionado.";
