@@ -14,7 +14,7 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent },
       // Agrega más rutas hijas aquí si es necesario
       // Ejemplo:
-      { path: 'register', component: RegisterComponent, canActivate: [AuthGuard]},
+      { path: 'register', component: RegisterComponent},
       // { path: 'user', component: UserComponent },
       // { path: 'documents', component: DocumentsComponent },
       // { path: 'cases', component: CasesComponent },
