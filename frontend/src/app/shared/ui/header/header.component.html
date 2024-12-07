@@ -1,3 +1,4 @@
+<!-- src/app/features/header/header.component.html -->
 <header
   class="flex justify-between items-center p-4 bg-gradient-to-r from-blue-300 to-purple-400 text-black animate-gradient"
 >
@@ -9,15 +10,28 @@
     <a routerLink="/assistant" class="hover:text-gray-300">Assistant</a>
   </nav>
   <div class="flex flex-row space-x-4">
-    <button
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    >
-      <a routerLink="/login">Login</a>
-    </button>
-    <button
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    >
-      <a routerLink="/register">Register</a>
-    </button>
+    <!-- Botones de Login y Register se muestran solo si no está logueado -->
+    <ng-container *ngIf="!(isLoggedIn$ | async); else loggedIn">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        <a routerLink="/login">Login</a>
+      </button>
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        <a routerLink="/register">Register</a>
+      </button>
+    </ng-container>
+
+    <!-- Botón de Logout se muestra solo si está logueado -->
+    <ng-template #loggedIn>
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        (click)="logout()"
+      >
+        Logout
+      </button>
+    </ng-template>
   </div>
 </header>
