@@ -7,15 +7,6 @@ export function authInterceptor(
     req: HttpRequest<unknown>,
     next: HttpHandlerFn
 ) {
-    // const whitelistedUrls = [
-    //     `${environment.apiUrl}/api/auth/login`,
-    //     `${environment.apiUrl}/api/auth/register`,
-    //     `${environment.apiUrl}/api/users`,
-    // ];
-
-    // if (whitelistedUrls.some((url) => req.url.includes(url))) {
-    //     return next(req);
-    // }
     // Obtain the token from the LoginService
     const authToken = inject(LoginService).getToken();
 
