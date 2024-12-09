@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 interface ErrorData {
   code: number;
@@ -10,6 +10,7 @@ interface ErrorData {
 @Component({
   selector: 'app-error',
   templateUrl: './error.component.html',
+  imports: [RouterLink],
   styleUrls: ['./error.component.css']
 })
 export class ErrorComponent implements OnInit {
