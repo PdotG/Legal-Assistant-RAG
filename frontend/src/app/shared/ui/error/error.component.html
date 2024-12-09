@@ -2,8 +2,8 @@
     class="flex items-center justify-center min-h-screen dark:bg-slate-700 bg-slate-400"
 >
     <div class="text-center">
-        <h1 class="text-6xl font-bold text-gray-950">403</h1>
-        <p class="mt-4 text-lg text-white">Forbidden</p>
+        <h1 class="text-6xl font-bold text-gray-950">{{ errorData.title}}</h1>
+        <p class="mt-4 text-lg text-white">{{ errorData.message}}</p>
         <button
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-6"
             routerLink="/"
