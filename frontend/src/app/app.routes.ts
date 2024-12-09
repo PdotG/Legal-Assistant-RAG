@@ -6,6 +6,8 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { DocumentsComponent } from './features/documents/pages/documents.component';
 import { ErrorComponent } from './shared/ui/error/error.component';
 import { AboutComponent } from './features/footer-pages/about/about.component';
+import { ContactComponent } from './features/footer-pages/contact/contact.component';
+import { TermsComponent } from './features/footer-pages/terms/terms.component';
 
 export const routes: Routes = [
   {
@@ -20,6 +22,8 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       { path: 'about', component: AboutComponent },
+      { path: 'contact', component: ContactComponent },
+      { path: 'terms', component: TermsComponent },
     ],
   },
   {
