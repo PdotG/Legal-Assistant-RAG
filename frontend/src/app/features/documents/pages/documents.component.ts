@@ -5,17 +5,24 @@ import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ViewChild, ElementRef } from '@angular/core';
+import { ChatModalComponent } from "../../chat-modal/pages/chat-modal.component";
 
 @Component({
   selector: 'app-documents',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ChatModalComponent],
   templateUrl: './documents.component.html',
   styleUrls: ['./documents.component.css']
 })
 export class DocumentsComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
+  @ViewChild(ChatModalComponent) chatModal!: ChatModalComponent;
+
   documents: FileUploadDto[] = [];
   selectedFile: File | null = null;
+
+  isChatModalVisible = false;
+  // Documento seleccionado para el chat
+  activeDocument: FileUploadDto | undefined = undefined;
 
   constructor(private uploadService: UploadService) { }
 
@@ -69,5 +76,22 @@ export class DocumentsComponent implements OnInit {
       },
       error: (error) => console.error('Error deleting document:', error)
     });
+  }
+
+  // Método para abrir el modal de chat
+  openChat(document: FileUploadDto): void {
+    this.activeDocument = document;
+    this.isChatModalVisible = true;
+
+    // Resetea el chat cada vez que se abre
+    if (this.chatModal) {
+      this.chatModal.resetChat(); // Llama al método de reinicio del chat
+    }
+  }
+
+  // Método para cerrar el modal de chat
+  closeChat(): void {
+    this.isChatModalVisible = false;
+    this.activeDocument = undefined;
   }
 }
