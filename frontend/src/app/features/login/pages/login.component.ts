@@ -5,6 +5,7 @@ import { LoginService } from '../data/login.service'; // Asegúrate de que la ru
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Login } from '../data/login';
+import { DialogService } from '../../../shared/ui/dialog/data/dialog.service';
 
 @Component({
   selector: 'app-login',
@@ -20,21 +21,21 @@ export class LoginComponent {
     password: '',
   };
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router, private dialogService: DialogService) {}
 
-  onSubmit(form: NgForm) {
+  async onSubmit(form: NgForm) {
     if (form.valid) {
       this.loginService.login(this.user.email, this.user.password).subscribe(
-        (response) => {
-          console.log('Login exitoso:', response);
+        async (response) => {
+          await this.dialogService.showInfo('Login has been succesfull!');
           this.router.navigate(['/']);
         },
-        (error) => {
-          console.error('Error en el login:', error);
+        async (error) => {
+          await this.dialogService.showError('An error ocurred while trying to login.');
         }
       );
     } else {
-      console.log('El formulario no es válido.');
+      await this.dialogService.showError('The form is not valid');
     }
   }
 }

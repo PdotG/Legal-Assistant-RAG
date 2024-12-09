@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RegisterService } from '../data/register.service';
+import { DialogService } from '../../../shared/ui/dialog/data/dialog.service';
 
 @Component({
   selector: 'app-register',
@@ -23,19 +24,21 @@ export class RegisterComponent {
     password: '',
   }
 
-  constructor(private router: Router, private registerService: RegisterService) {}
+  constructor(private router: Router, private registerService: RegisterService, private dialogService : DialogService) {}
 
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.registerService.register(this.user).subscribe({
-        next: (response) => {
+        next: async(response) => {
           this.successMessage = response.message;
           this.errorMessage = '';
           form.resetForm();
+          await this.dialogService.showInfo('Register has been succesfull!');
         },
-        error: (error: Error) => {
+         error: async (error: Error) => {
           this.errorMessage = error.message;
           this.successMessage = '';
+          await this.dialogService.showError('An error ocurred when trying to register.');
         },
       });
     }

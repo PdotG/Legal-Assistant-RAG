@@ -1,0 +1,21 @@
+<div *ngIf="dialog" 
+         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+         [@overlay]>
+      <div class="dark:bg-slate-900/90 rounded-lg shadow-xl p-6 max-w-md w-full mx-4"
+           [@dialog]>
+        <h2 class="text-xl font-bold mb-4 text-white">{{dialog.title}}</h2>
+        <p class="mb-6 text-white">{{dialog.message}}</p>
+        <div class="flex justify-end gap-3">
+          <button *ngIf="dialog.type === 'confirm'"
+                  (click)="onCancel()"
+                  class="px-4 py-2 border rounded hover:bg-gray-100">
+            {{dialog.cancelText || 'Cancel'}}
+          </button>
+          <button (click)="onConfirm()"
+                [ngClass]="dialog.type === 'error' ? 'bg-red-500' : (dialog.type === 'success' ? 'bg-green-500' : 'bg-blue-500')"
+                  class="px-4 py-2 text-white rounded hover:opacity-90">
+            {{dialog.confirmText || 'OK'}}
+          </button>
+        </div>
+      </div>
+    </div>
