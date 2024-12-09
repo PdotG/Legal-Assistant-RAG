@@ -4,6 +4,7 @@ import { FileUploadDto } from '../data/file';
 import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-documents',
@@ -12,6 +13,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./documents.component.css']
 })
 export class DocumentsComponent implements OnInit {
+  @ViewChild('fileInput') fileInput!: ElementRef;
   documents: FileUploadDto[] = [];
   selectedFile: File | null = null;
 
@@ -51,6 +53,7 @@ export class DocumentsComponent implements OnInit {
           this.loadDocuments();
           form.resetForm();
           this.selectedFile = null;
+          this.fileInput.nativeElement.value = '';
         },
         error: (error) => {
           console.error('Error uploading file:', error);
