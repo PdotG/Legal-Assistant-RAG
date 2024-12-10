@@ -59,4 +59,15 @@ export class LoginService {
     }
     return false;
   }
+
+  getIdUserLoggedIn(): string | null {
+    const token = this.getToken();
+    if (token) {
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload.replace('-', '+').replace('_', '/'));
+      const parsedPayload = JSON.parse(decodedPayload);
+      return parsedPayload.sub || null;
+    }
+    return null;
+  }
 }

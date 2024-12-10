@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UploadService } from '../data/upload.service'; 
+import { UploadService } from '../data/upload.service';
+import { LoginService } from '../../login/data/login.service';
 import { FileUploadDto } from '../data/file';
 import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -24,7 +25,7 @@ export class DocumentsComponent implements OnInit {
   // Documento seleccionado para el chat
   activeDocument: FileUploadDto | undefined = undefined;
 
-  constructor(private uploadService: UploadService) { }
+  constructor(private uploadService: UploadService, private loginService: LoginService) { }
 
   ngOnInit(): void {
     this.loadDocuments();

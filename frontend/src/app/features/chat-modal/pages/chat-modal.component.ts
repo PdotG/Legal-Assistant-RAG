@@ -55,19 +55,15 @@ export class ChatModalComponent {
       this.scrollToBottom();
       
       this.isLoading = true;
-      this.currentBotMessage = ''; // Reset mensaje actual del bot
-
-      // Crear nuevo mensaje del bot vacío
-      this.messages.push({ text: '', sender: 'bot' });
-      const botMessageIndex = this.messages.length - 1;
+      const botMessage = { text: '', sender: 'bot' as const };
+      this.messages.push(botMessage);
 
       this.chatService.askQuestion(userMessage, this.document.id).subscribe({
-        next: (chunk) => {
-          // Acumular el chunk en el mensaje actual
-          this.currentBotMessage += chunk;
-          // Actualizar el último mensaje del bot
-          this.messages[botMessageIndex].text = this.currentBotMessage;
-          this.scrollToBottom();
+        next: (chunk: string) => {
+          if (chunk && chunk.trim()) {
+            botMessage.text = botMessage.text + chunk;
+            this.scrollToBottom();
+          }
         },
         error: (error) => {
           console.error('Error:', error);
@@ -79,7 +75,6 @@ export class ChatModalComponent {
         },
         complete: () => {
           this.isLoading = false;
-          this.currentBotMessage = ''; // Limpiar el mensaje actual
           this.scrollToBottom();
         }
       });

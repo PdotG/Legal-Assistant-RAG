@@ -1,6 +1,7 @@
+import { HttpClient, HttpHeaders, HttpEventType, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { ChatRequestDto } from './chat';
 
@@ -13,46 +14,51 @@ export class ChatService {
   constructor(private http: HttpClient) {}
 
   askQuestion(message: string, fileId: number): Observable<string> {
+    const requestBody: ChatRequestDto = {
+      message,
+      fileId
+    };
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'text/event-stream'
+    });
+
     return new Observable<string>((observer) => {
-      const requestBody: ChatRequestDto = {
-        message: message,
-        fileId: fileId
-      };
-
-      // Realizar POST con el cuerpo de la solicitud
-      this.http.post(`${this.apiUrl}/ask`, requestBody, {
+      let buffer = '';
+      
+      const httpSubscription = this.http.post(`${this.apiUrl}/ask`, requestBody, {
+        headers,
+        observe: 'events',
         responseType: 'text',
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json'
-        })
-      }).subscribe();
+        reportProgress: true
+      }).pipe(
+        filter(event => event.type === HttpEventType.DownloadProgress)
+      ).subscribe({
+        next: (event: HttpEvent<any>) => {
+          if (event.type === HttpEventType.DownloadProgress) {
+            const newData = (event as any).partialText;
+            const newContent = newData.substring(buffer.length);
+            buffer = newData;
 
-      // Configurar EventSource para recibir el streaming
-      const eventSource = new EventSource(
-        `${this.apiUrl}/ask`,
-        { withCredentials: true }
-      );
+            const chunks = newContent.split('\n\n')
+              .filter((chunk: string) => chunk.startsWith('data: '))
+              .map((chunk: string) => chunk.replace('data: ', ''));
 
-      // Manejar mensajes recibidos
-      eventSource.onmessage = (event) => {
-        if (event.data === '[DONE]') {
-          observer.complete();
-          eventSource.close();
-        } else {
-          observer.next(event.data);
-        }
-      };
+            chunks.forEach((chunk: string) => {
+              if (chunk === '[DONE]') {
+                observer.complete();
+              } else {
+                observer.next(chunk);
+              }
+            });
+          }
+        },
+        error: (error) => observer.error(error),
+        complete: () => observer.complete()
+      });
 
-      // Manejar errores
-      eventSource.onerror = (error) => {
-        observer.error(error);
-        eventSource.close();
-      };
-
-      // Limpieza al desuscribirse
-      return () => {
-        eventSource.close();
-      };
+      return () => httpSubscription.unsubscribe();
     });
   }
 }
