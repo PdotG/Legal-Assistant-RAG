@@ -8,12 +8,14 @@ import { ErrorComponent } from './shared/ui/error/error.component';
 import { AboutComponent } from './features/footer-pages/about/about.component';
 import { ContactComponent } from './features/footer-pages/contact/contact.component';
 import { TermsComponent } from './features/footer-pages/terms/terms.component';
+import { MainpageComponent } from './features/mainpage/mainpage.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
     children: [
+      { path: '', component: MainpageComponent },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       {
