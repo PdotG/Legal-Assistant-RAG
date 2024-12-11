@@ -1,13 +1,16 @@
-<footer>
-  <section class="bg-gradient-to-r from-blue-300 to-purple-400 text-black">
+<footer class="mt-auto">
+  <section
+    class="bg-gradient-to-r from-blue-600 via-blue-800 to-purple-600 text-white shadow-lg"
+  >
     <div
-      class="max-w-screen-xl px-4 py-4 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8"
+      class="max-w-screen-xl px-4 py-6 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8"
     >
+      <!-- Navigation Links -->
       <nav class="flex flex-wrap justify-center -mx-5 -my-2">
         <div class="px-5 py-2">
           <a
             href="/about"
-            class="text-base leading-6 text-black hover:text-gray-600"
+            class="text-base font-medium leading-6 text-white hover:text-gray-200 transition duration-300"
           >
             About
           </a>
@@ -15,7 +18,7 @@
         <div class="px-5 py-2">
           <a
             href="/contact"
-            class="text-base leading-6 text-black hover:text-gray-600"
+            class="text-base font-medium leading-6 text-white hover:text-gray-200 transition duration-300"
           >
             Contact
           </a>
@@ -23,20 +26,22 @@
         <div class="px-5 py-2">
           <a
             href="/terms"
-            class="text-base leading-6 text-black hover:text-gray-600"
+            class="text-base font-medium leading-6 text-white hover:text-gray-200 transition duration-300"
           >
             Terms
           </a>
         </div>
       </nav>
-      <div class="flex justify-center mt-2 space-x-6">
+
+      <!-- Social Media Icons -->
+      <div class="flex justify-center mt-4 space-x-6">
         <a
           href="https://www.instagram.com/cristiano/"
-          class="text-black hover:text-gray-600"
+          class="text-white hover:text-gray-200 transform hover:scale-110 transition duration-300"
         >
           <span class="sr-only">Instagram</span>
           <svg
-            class="w-6 h-6"
+            class="w-7 h-7"
             aria-hidden="true"
             fill="currentColor"
             viewBox="0 0 24 24"
@@ -50,11 +55,11 @@
         </a>
         <a
           href="https://github.com/PdotG"
-          class="text-black hover:text-gray-600"
+          class="text-white hover:text-gray-200 transform hover:scale-110 transition duration-300"
         >
           <span class="sr-only">GitHub</span>
           <svg
-            class="w-6 h-6"
+            class="w-7 h-7"
             aria-hidden="true"
             fill="currentColor"
             viewBox="0 0 24 24"
@@ -67,8 +72,11 @@
           </svg>
         </a>
       </div>
-      <p class="text-base leading-6 text-center text-black">
-        Made with ❤️ with Angular & TailwindCSS
+
+      <!-- Copyright Text -->
+      <p class="text-base font-medium leading-6 text-center text-white mt-8">
+        Made with <span class="animate-pulse">❤️</span> with Angular &
+        TailwindCSS
       </p>
     </div>
   </section>
