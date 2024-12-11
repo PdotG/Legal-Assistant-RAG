@@ -45,6 +45,33 @@ namespace backend.Controllers
             return Ok(fileDto);
         }
 
+        [HttpGet("download/{id}")]
+        public async Task<IActionResult> DownloadFile(int id)
+        {
+            // Verificar la autenticación del usuario
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                return Unauthorized();
+            
+            // Obtener el archivo desde el repositorio
+            var file = await _repository.GetByIdAsync(id);
+            if (file == null || file.UserId != userId)
+                return NotFound(new { message = "Archivo no encontrado o sin permiso para acceder." });
+            
+            // Verificar que el archivo exista en el sistema de archivos
+            if (!System.IO.File.Exists(file.FilePath))
+                return NotFound(new { message = "El archivo no existe en el servidor." });
+            
+            // Leer el archivo y retornarlo como un FileResult
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, "application/pdf", file.Name + Path.GetExtension(file.FilePath));
+        }
+
         [HttpPost]
         public async Task<IActionResult> UploadFile([FromForm] FileUploadDto fileUploadDto)
         {
