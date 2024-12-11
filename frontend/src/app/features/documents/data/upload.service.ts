@@ -31,4 +31,11 @@ export class UploadService {
   deleteFile(name: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${name}`);
   }
+
+  downloadFile(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/download/${id}`, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Accept', 'application/pdf')
+    });
+  }
 }

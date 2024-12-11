@@ -5,15 +5,14 @@ import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ViewChild, ElementRef } from '@angular/core';
-import { ChatModalComponent } from "../../chat-modal/pages/chat-modal.component";
+import { ChatModalComponent } from '../../chat-modal/pages/chat-modal.component';
 import { MatDialog } from '@angular/material/dialog';
-import { PdfModalComponent } from '../../pdf-modal/pdf-modal.component';
 
 @Component({
   selector: 'app-documents',
   imports: [CommonModule, FormsModule, ChatModalComponent],
   templateUrl: './documents.component.html',
-  styleUrls: ['./documents.component.css']
+  styleUrls: ['./documents.component.css'],
 })
 export class DocumentsComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -26,7 +25,10 @@ export class DocumentsComponent implements OnInit {
   // Documento seleccionado para el chat
   activeDocument: FileUploadDto | undefined = undefined;
 
-  constructor(private uploadService: UploadService, private dialog: MatDialog) { }
+  constructor(
+    private uploadService: UploadService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadDocuments();
@@ -34,8 +36,8 @@ export class DocumentsComponent implements OnInit {
 
   loadDocuments(): void {
     this.uploadService.getAllFiles().subscribe({
-      next: (files) => this.documents = files,
-      error: (error) => console.error('Error loading documents:', error)
+      next: (files) => (this.documents = files),
+      error: (error) => console.error('Error loading documents:', error),
     });
   }
 
@@ -55,7 +57,8 @@ export class DocumentsComponent implements OnInit {
       return;
     }
 
-    this.uploadService.uploadFile(this.selectedFile, this.selectedFile.name)
+    this.uploadService
+      .uploadFile(this.selectedFile, this.selectedFile.name)
       .subscribe({
         next: (response) => {
           console.log('File uploaded successfully', response);
@@ -67,16 +70,16 @@ export class DocumentsComponent implements OnInit {
         error: (error) => {
           console.error('Error uploading file:', error);
           alert('Error uploading file');
-        }
+        },
       });
   }
 
   deleteDocument(name: string): void {
     this.uploadService.deleteFile(name).subscribe({
       next: () => {
-        this.documents = this.documents.filter(doc => doc.name !== name);
+        this.documents = this.documents.filter((doc) => doc.name !== name);
       },
-      error: (error) => console.error('Error deleting document:', error)
+      error: (error) => console.error('Error deleting document:', error),
     });
   }
 
@@ -97,18 +100,15 @@ export class DocumentsComponent implements OnInit {
     this.activeDocument = undefined;
   }
 
-  openPdfModal(documentId: number): void {
-    this.uploadService.getFileById(documentId).subscribe({
-      next: (file: FileUploadDto) => {
-        const pdfSrc = file.filePath;
-        this.dialog.open(PdfModalComponent, {
-          data: pdfSrc,
-          width: '80%',
-          height: '90%'
-        });
+  openPdf(documentId: number): void {
+    this.uploadService.downloadFile(documentId).subscribe({
+      next: (blob: Blob) => {
+        const fileURL = URL.createObjectURL(blob);
+        window.open(fileURL, '_blank', 'noopener,noreferrer');
+        URL.revokeObjectURL(fileURL);
       },
       error: (error) => {
-        console.error('Error obteniendo el archivo:', error);
+        console.error('Error descargando el archivo:', error);
       }
     });
   }
