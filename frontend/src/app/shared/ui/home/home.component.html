@@ -1,3 +1,142 @@
-<main class="dark:bg-slate-700 bg-slate-400"  style="min-height: 100vh; display: flex; justify-content: center; align-items: center;">
-    <router-outlet></router-outlet>
+<main
+  class="dark:bg-slate-700 bg-slate-400"
+  style="
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  "
+>
+  <router-outlet></router-outlet>
+  <div class="container mx-auto px-6 py-16 space-y-24">
+    <!-- Hero Section -->
+    <section class="flex flex-col lg:flex-row items-center gap-12">
+      <div class="lg:w-1/2 space-y-8">
+        <h1 class="text-5xl lg:text-6xl font-bold text-white">
+          AI-Powered
+          <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500"
+            >Legal Assistant
+          </span>
+        </h1>
+        <p class="text-xl text-gray-200">
+          Transform your legal documents into actionable insights with our
+          advanced AI technology.
+        </p>
+        <div class="space-x-4">
+          <button
+            routerLink="/upload"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg transition duration-300"
+          >
+            Upload Document
+          </button>
+          <button
+            routerLink="/about"
+            class="border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-slate-700 transition duration-300"
+          >
+            Learn More
+          </button>
+        </div>
+      </div>
+      <div class="lg:w-1/2">
+        <img
+          [src]="'assets/images/justice.jpg'"
+          alt="Legal Hammer"
+          class="w-full h-auto"
+        />
+      </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="bg-slate-800/50 backdrop-blur-lg rounded-2xl p-12">
+      <h2 class="text-3xl font-bold text-center text-white mb-12">
+        Key Features
+      </h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div
+          class="bg-white/10 p-6 rounded-xl hover:scale-105 transition-transform"
+        >
+          <div class="text-blue-400 text-4xl mb-4">📄</div>
+          <h3 class="text-xl font-semibold text-white mb-2">
+            Document Analysis
+          </h3>
+          <p class="text-gray-300">
+            Advanced AI-powered legal document analysis
+          </p>
+        </div>
+        <div
+          class="bg-white/10 p-6 rounded-xl hover:scale-105 transition-transform"
+        >
+          <div class="text-purple-400 text-4xl mb-4">🔍</div>
+          <h3 class="text-xl font-semibold text-white mb-2">Smart Search</h3>
+          <p class="text-gray-300">
+            Intelligent search through legal documents
+          </p>
+        </div>
+        <div
+          class="bg-white/10 p-6 rounded-xl hover:scale-105 transition-transform"
+        >
+          <div class="text-green-400 text-4xl mb-4">📊</div>
+          <h3 class="text-xl font-semibold text-white mb-2">Insights</h3>
+          <p class="text-gray-300">Detailed analytics and recommendations</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Grid Statistics -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div
+        class="bg-white/10 backdrop-blur-lg p-6 rounded-xl flex flex-col items-center justify-center"
+      >
+        <div class="text-4xl font-bold text-white mb-2">99%</div>
+        <div class="text-gray-300">Accuracy Rate</div>
+      </div>
+      <div
+        class="bg-white/10 backdrop-blur-lg p-6 rounded-xl flex flex-col items-center justify-center"
+      >
+        <div class="text-4xl font-bold text-white mb-2">5K+</div>
+        <div class="text-gray-300">Documents Processed</div>
+      </div>
+      <div
+        class="bg-white/10 backdrop-blur-lg p-6 rounded-xl flex flex-col items-center justify-center"
+      >
+        <div class="text-4xl font-bold text-white mb-2">24/7</div>
+        <div class="text-gray-300">Support Available</div>
+      </div>
+      <div
+        class="bg-white/10 backdrop-blur-lg p-6 rounded-xl flex flex-col items-center justify-center"
+      >
+        <div class="text-4xl font-bold text-white mb-2">100+</div>
+        <div class="text-gray-300">Happy Clients</div>
+      </div>
+    </section>
+    <section class="bg-slate-800/30 py-24">
+      <div class="container mx-auto px-6">
+        <div class="flex flex-col lg:flex-row-reverse items-center gap-12">
+          <div class="lg:w-1/2 space-y-8">
+            <h2 class="text-4xl lg:text-5xl font-bold text-white">
+              Streamline Your Legal Work
+              <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-500"
+              >
+                Effortlessly
+              </span>
+            </h2>
+            <p class="text-xl text-gray-200">
+              Let our AI handle the complexity while you focus on what matters
+              most.
+            </p>
+          </div>
+          <div class="lg:w-1/2">
+            <div
+              class="aspect-video bg-slate-600/30 rounded-lg flex items-center justify-center"
+            >
+              <img src="../../../assets/robothand.jpg" alt="Legal Hammer" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </main>
+<!-- Secondary Hero Section -->
