@@ -44,9 +44,11 @@
         *ngFor="let document of documents"
         class="bg-white/15 text-black p-3 sm:p-4 rounded-lg shadow-md"
       >
-        <h3 class="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">
+      <h3 class="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">
+        <span (click)="openPdfModal(document.id)" class="cursor-pointer">
           {{ document.name }}
-        </h3>
+        </span>
+      </h3>
         <button
           (click)="openChat(document)"
           class="w-full bg-green-500 text-black py-1 px-2 sm:py-1.5 sm:px-3 rounded hover:bg-green-600 transition duration-200"

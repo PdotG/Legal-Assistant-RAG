@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { UploadService } from '../data/upload.service';
-import { LoginService } from '../../login/data/login.service';
 import { FileUploadDto } from '../data/file';
 import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ViewChild, ElementRef } from '@angular/core';
 import { ChatModalComponent } from "../../chat-modal/pages/chat-modal.component";
+import { MatDialog } from '@angular/material/dialog';
+import { PdfModalComponent } from '../../pdf-modal/pdf-modal.component';
 
 @Component({
   selector: 'app-documents',
@@ -25,7 +26,7 @@ export class DocumentsComponent implements OnInit {
   // Documento seleccionado para el chat
   activeDocument: FileUploadDto | undefined = undefined;
 
-  constructor(private uploadService: UploadService, private loginService: LoginService) { }
+  constructor(private uploadService: UploadService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.loadDocuments();
@@ -94,5 +95,21 @@ export class DocumentsComponent implements OnInit {
   closeChat(): void {
     this.isChatModalVisible = false;
     this.activeDocument = undefined;
+  }
+
+  openPdfModal(documentId: number): void {
+    this.uploadService.getFileById(documentId).subscribe({
+      next: (file: FileUploadDto) => {
+        const pdfSrc = file.filePath;
+        this.dialog.open(PdfModalComponent, {
+          data: pdfSrc,
+          width: '80%',
+          height: '90%'
+        });
+      },
+      error: (error) => {
+        console.error('Error obteniendo el archivo:', error);
+      }
+    });
   }
 }
