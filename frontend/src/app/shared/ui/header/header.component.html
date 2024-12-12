@@ -5,18 +5,17 @@
     class="flex items-center space-x-3 text-lg md:text-xl font-bold mb-1 md:mb-0 ml-2"
   >
     <!-- Logo container with refined dimensions and hover effect -->
-    <div
-      class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center transition-transform duration-300 hover:scale-110"
+    <a
+      routerLink="/"
+      class="hover:text-gray-200 transition-colors hover:scale-105 duration-300"
     >
-      <img
-        [src]="'images/bookWithBookmark.svg'"
-        alt="Legal Assistant Logo"
-        class="w-full h-full object-contain"
-      />
-    </div>
-    <a routerLink="/" class="hover:text-gray-200 transition-colors duration-300"
-      >Legal Assistant RAG</a
-    >
+      Legal Assistant
+      <span
+        class="bg-white text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 text-sm"
+      >
+        RAG
+      </span>
+    </a>
   </div>
 
   <!-- Mobile menu button -->
@@ -34,7 +33,7 @@
   </button>
 
   <nav
-    class="w-full md:w-auto space-y-1 md:space-y-0 md:space-x-4 mb-2 md:mb-0 text-sm"
+    class="w-full md:w-auto space-y-1 md:space-y-0 md:space-x-4 mb-2 md:mb-0 font-bold text-base"
   >
     <a
       routerLink="/user"
