@@ -4,6 +4,7 @@ import { HomeComponent } from './shared/ui/home/home.component';
 import { RegisterComponent } from './features/register/pages/register.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { DocumentsComponent } from './features/documents/pages/documents.component';
+import { UserProfileComponent } from './features/user-profile/pages/user-profile.component';
 import { ErrorComponent } from './shared/ui/error/error.component';
 import { AboutComponent } from './features/footer-pages/about/about.component';
 import { ContactComponent } from './features/footer-pages/contact/contact.component';
@@ -21,6 +22,11 @@ export const routes: Routes = [
       {
         path: 'documents',
         component: DocumentsComponent,
+        canActivate: [AuthGuard],
+      },
+      { 
+        path: 'profile', 
+        component: UserProfileComponent,
         canActivate: [AuthGuard],
       },
       { path: 'about', component: AboutComponent },

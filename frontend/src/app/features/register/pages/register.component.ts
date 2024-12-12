@@ -33,12 +33,12 @@ export class RegisterComponent {
           this.successMessage = response.message;
           this.errorMessage = '';
           form.resetForm();
-          await this.dialogService.showInfo('Register has been succesfull!');
+          await this.dialogService.showInfo(this.successMessage);
         },
          error: async (error: Error) => {
           this.errorMessage = error.message;
           this.successMessage = '';
-          await this.dialogService.showError('An error ocurred when trying to register.');
+          await this.dialogService.showError(this.errorMessage);
         },
       });
     }

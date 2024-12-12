@@ -1,83 +1,56 @@
 <header
-  class="flex flex-col md:flex-row justify-between items-center p-1 md:p-2 bg-gradient-to-r from-blue-600 via-blue-800 to-purple-700 text-white shadow-lg"
->
-  <div
-    class="flex items-center space-x-3 text-lg md:text-xl font-bold mb-1 md:mb-0 ml-2"
-  >
+  class="flex flex-col md:flex-row justify-between items-center p-1 md:p-2 bg-gradient-to-r from-blue-600 via-blue-800 to-purple-700 text-white shadow-lg">
+  <div class="flex items-center space-x-3 text-lg md:text-xl font-bold mb-1 md:mb-0 ml-2">
     <!-- Logo container with refined dimensions and hover effect -->
-    <a
-      routerLink="/"
-      class="hover:text-gray-200 transition-colors hover:scale-105 duration-300"
-    >
+    <a routerLink="/" class="hover:text-gray-200 transition-colors hover:scale-105 duration-300">
       Legal Assistant
-      <span
-        class="bg-white text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 text-sm"
-      >
+      <span class="bg-white text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 text-sm">
         RAG
       </span>
     </a>
   </div>
 
   <!-- Mobile menu button -->
-  <button
-    class="md:hidden absolute top-2 right-2 p-1.5 rounded-lg hover:bg-white/10 transition-colors duration-300"
-  >
+  <button class="md:hidden absolute top-2 right-2 p-1.5 rounded-lg hover:bg-white/10 transition-colors duration-300">
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M4 6h16M4 12h16M4 18h16"
-      ></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
     </svg>
   </button>
 
-  <nav
-    class="w-full md:w-auto space-y-1 md:space-y-0 md:space-x-4 mb-2 md:mb-0 font-bold text-base"
-  >
-    <a
-      routerLink="/user"
-      class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105"
-      >User</a
-    >
-    <a
-      routerLink="/documents"
-      class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105"
-      >Documents</a
-    >
-    <a
-      routerLink="/cases"
-      class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105"
-      >Cases</a
-    >
-    <a
-      routerLink="/assistant"
-      class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105"
-      >Assistant</a
-    >
+  <nav class="w-full md:w-auto space-y-1 md:space-y-0 md:space-x-4 mb-2 md:mb-0 font-bold text-base">
+    <a routerLink="/user"
+      class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105">User</a>
+    <a routerLink="/documents"
+      class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105">Documents</a>
+    <a routerLink="/cases"
+      class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105">Cases</a>
+    <a routerLink="/assistant"
+      class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105">Assistant</a>
   </nav>
 
   <div class="flex flex-col md:flex-row space-y-1 md:space-y-0 md:space-x-3">
     <ng-container *ngIf="!(isLoggedIn$ | async); else loggedIn">
       <button
-        class="w-full md:w-auto bg-white/90 text-blue-600 hover:bg-white font-semibold py-1.5 px-4 rounded-full transition-all duration-300 text-sm hover:shadow-md"
-      >
+        class="w-full md:w-auto bg-white/90 text-blue-600 hover:bg-white font-semibold py-1.5 px-4 rounded-full transition-all duration-300 text-sm hover:shadow-md">
         <a routerLink="/login" class="block w-full">Login</a>
       </button>
       <button
-        class="w-full md:w-auto bg-transparent border border-white/80 text-white hover:bg-white/10 font-semibold py-1.5 px-4 rounded-full transition-all duration-300 text-sm"
-      >
+        class="w-full md:w-auto bg-transparent border border-white/80 text-white hover:bg-white/10 font-semibold py-1.5 px-4 rounded-full transition-all duration-300 text-sm">
         <a routerLink="/register" class="block w-full">Register</a>
       </button>
     </ng-container>
 
     <ng-template #loggedIn>
       <button
+        class="w-full md:w-auto bg-white/90 text-blue-600 hover:bg-green-50 font-semibold py-1.5 px-4 rounded-full transition-all duration-300 text-sm hover:shadow-md mt-2 md:mt-0 md:ml-3">
+        <a routerLink="/profile" class="block w-full">Edit Profile</a>
+      </button>
+      <button
         class="w-full md:w-auto bg-white/90 text-blue-600 hover:bg-red-50 font-semibold py-1.5 px-4 rounded-full transition-all duration-300 text-sm hover:shadow-md"
-        (click)="logout()"
-      >
+        (click)="logout()">
         Logout
       </button>
+
     </ng-template>
   </div>
 </header>
