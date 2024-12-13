@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UploadService } from '../data/upload.service';
+import { FileService } from '../data/file.service';
 import { FileUploadDto } from '../data/file';
 import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ViewChild, ElementRef } from '@angular/core';
 import { ChatModalComponent } from '../../chat-modal/pages/chat-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogService } from '../../../shared/ui/dialog/data/dialog.service';
 
 @Component({
   selector: 'app-documents',
@@ -20,14 +21,16 @@ export class DocumentsComponent implements OnInit {
 
   documents: FileUploadDto[] = [];
   selectedFile: File | null = null;
+  selectedFileName: string | null = null;
 
   isChatModalVisible = false;
   // Documento seleccionado para el chat
   activeDocument: FileUploadDto | undefined = undefined;
 
   constructor(
-    private uploadService: UploadService,
-    private dialog: MatDialog
+    private fileService: FileService,
+    private dialog: MatDialog,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -35,9 +38,9 @@ export class DocumentsComponent implements OnInit {
   }
 
   loadDocuments(): void {
-    this.uploadService.getAllFiles().subscribe({
+    this.fileService.getAllFilesByUser().subscribe({
       next: (files) => (this.documents = files),
-      error: (error) => console.error('Error loading documents:', error),
+      error: (error) => this.dialogService.showError('Error loading documents'),
     });
   }
 
@@ -45,37 +48,43 @@ export class DocumentsComponent implements OnInit {
     const file = event.target.files[0];
     if (file && file.type === 'application/pdf') {
       this.selectedFile = file;
+      this.selectedFileName = file.name;
     } else {
-      alert('Please select a PDF file');
+      this.dialogService.showError('Please select a PDF file');
       event.target.value = null;
     }
   }
 
   onUpload(form: NgForm): void {
     if (!this.selectedFile) {
-      alert('Please select a file');
+      this.dialogService.showError('Please select a file');
       return;
     }
 
-    this.uploadService
+    this.fileService
       .uploadFile(this.selectedFile, this.selectedFile.name)
       .subscribe({
         next: (response) => {
-          console.log('File uploaded successfully', response);
+          this.dialogService.showInfo('File uploaded successfully');
           this.loadDocuments();
-          form.resetForm();
+          // Clear file input managing DOM directly
+          const fileInput = document.querySelector('#file') as HTMLInputElement;
+          if (fileInput) fileInput.value = '';
+          // Reset file selection state
           this.selectedFile = null;
-          this.fileInput.nativeElement.value = '';
+          this.selectedFileName = null;
+          // Reset form
+          form.resetForm();
         },
         error: (error) => {
           console.error('Error uploading file:', error);
-          alert('Error uploading file');
+          this.dialogService.showError('Error uploading file');
         },
       });
   }
 
   deleteDocument(name: string): void {
-    this.uploadService.deleteFile(name).subscribe({
+    this.fileService.deleteFile(name).subscribe({
       next: () => {
         this.documents = this.documents.filter((doc) => doc.name !== name);
       },
@@ -101,7 +110,7 @@ export class DocumentsComponent implements OnInit {
   }
 
   openPdf(documentId: number): void {
-    this.uploadService.downloadFile(documentId).subscribe({
+    this.fileService.downloadFile(documentId).subscribe({
       next: (blob: Blob) => {
         const fileURL = URL.createObjectURL(blob);
         window.open(fileURL, '_blank', 'noopener,noreferrer');
@@ -109,7 +118,7 @@ export class DocumentsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error descargando el archivo:', error);
-      }
+      },
     });
   }
 }

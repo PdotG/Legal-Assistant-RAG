@@ -50,10 +50,10 @@ builder.Services.AddSingleton(sp => new OpenAIClient(builder.Configuration["Open
 builder.Services.AddAutoMapper(typeof(Program));
 
 // Registrar filtros globales
-// builder.Services.AddControllers(options =>
-// {
-//     options.Filters.Add<GlobalExceptionFilter>(); // Registro del filtro personalizado
-// });
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>(); // Registro del filtro personalizado
+});
 
 // Agregar servicio CORS
 builder.Services.AddCors(options =>

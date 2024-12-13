@@ -34,13 +34,8 @@ namespace backend.Data.Repositories
                 new NpgsqlParameter("@created_at", embedding.CreatedAt)
             };
 
-            await using var connection = (NpgsqlConnection)_context.Database.GetDbConnection();
-            await connection.OpenAsync();
 
-            await using var command = new NpgsqlCommand(sql, connection);
-            command.Parameters.AddRange(parameters);
-
-            await command.ExecuteNonQueryAsync();
+            await _context.Database.ExecuteSqlRawAsync(sql, parameters);
         }
 
         // Método para recuperar Embeddings por id de archivo

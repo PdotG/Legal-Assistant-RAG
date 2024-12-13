@@ -34,6 +34,7 @@ export class RegisterComponent {
           this.errorMessage = '';
           form.resetForm();
           await this.dialogService.showInfo(this.successMessage);
+          this.router.navigate(['/login']);
         },
          error: async (error: Error) => {
           this.errorMessage = error.message;

@@ -49,12 +49,12 @@ namespace backend.Controllers
                     await Response.Body.WriteAsync(System.Text.Encoding.UTF8.GetBytes("No se encontraron resultados relevantes.\n"));
                     return;
                 }
-
                 var bestMatch = sortedChunks[0];
                 string? answer = bestMatch.CosineSimilarity > 0.25
-                    ? bestMatch.PlainText.Replace("\n", " ").Replace("\t", " ").Replace("¶", "").Trim()
+                    ? System.Text.RegularExpressions.Regex.Replace(
+                        bestMatch.PlainText.Replace("\n", " ").Replace("\t", " ").Replace("¶", "").Trim(),
+                        @"\s+(?=\d)", "")
                     : null;
-                
                 string prompt = string.IsNullOrEmpty(answer)
                     ? $"Actúa como un asistente legal llamado Legal RAG Assistant. La pregunta es: {request.Message}. No se ha encontrado una respuesta adecuada en la información almacenada."
                     : $"Actúa como un asistente legal llamado Legal RAG Assistant. La pregunta es: {request.Message}. La respuesta: {answer}. Responde a la pregunta con la respuesta que se te ha proporcionado.";
