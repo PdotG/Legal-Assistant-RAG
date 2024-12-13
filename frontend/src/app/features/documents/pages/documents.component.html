@@ -1,5 +1,5 @@
 <div
-  class="min-h-screen flex flex-col lg:flex-row gap-10 bg-transparent text-white p-4 sm:p-6 lg:p-8 my-10"
+  class="min-h-screen flex flex-col lg:flex-row gap-10 bg-gray-800/60 text-white p-4 sm:p-6 lg:p-8 my-10 rounded-lg"
 >
   <!-- Upload Document section - adjusted to fit content -->
   <div
@@ -66,7 +66,7 @@
 
   <!-- Your Documents section - made twice as wide -->
   <div
-    class="flex-grow bg-black/50 p-4 sm:p-6 rounded-3xl shadow-lg mb-5 lg:min-w-[66%] mx-auto"
+    class="flex-grow bg-black/50 p-4 sm:p-6 rounded-lg shadow-lg mb-5 lg:min-w-[66%] mx-auto"
   >
     <h2 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-center">
       Your Documents
@@ -76,10 +76,13 @@
     >
       <div
         *ngFor="let document of documents"
-        class="bg-white/15 text-black p-3 sm:p-4 rounded-lg shadow-md"
+        class="bg-white/15 text-black p-3 sm:p-4 rounded-lg shadow-md hover:bg-white/25 transition duration-200"
       >
         <h3 class="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">
-          <span (click)="openPdf(document.id)" class="cursor-pointer">
+          <span
+            (click)="openPdf(document.id)"
+            class="cursor-pointer hover:underline"
+          >
             {{ document.name }}
           </span>
         </h3>
