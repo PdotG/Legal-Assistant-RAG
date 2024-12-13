@@ -56,8 +56,8 @@ namespace backend.Controllers
                     : null;
                 
                 string prompt = string.IsNullOrEmpty(answer)
-                    ? $"Actúa como un asistente legal llamado RAG Assistant. La pregunta es: {request.Message}. No se ha encontrado una respuesta adecuada en la información almacenada."
-                    : $"Actúa como un asistente legal llamado RAG Assistant. La pregunta es: {request.Message}. La respuesta: {answer}. Responde a la pregunta con la respuesta que se te ha proporcionado.";
+                    ? $"Actúa como un asistente legal llamado Legal RAG Assistant. La pregunta es: {request.Message}. No se ha encontrado una respuesta adecuada en la información almacenada."
+                    : $"Actúa como un asistente legal llamado Legal RAG Assistant. La pregunta es: {request.Message}. La respuesta: {answer}. Responde a la pregunta con la respuesta que se te ha proporcionado.";
 
                 // Llama al método de streaming de OpenAI
                 AsyncCollectionResult<StreamingChatCompletionUpdate> completionUpdates =

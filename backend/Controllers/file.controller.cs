@@ -1,4 +1,3 @@
-
 using AutoMapper;
 using backend.Data.Repositories;
 using backend.Dtos;
@@ -156,7 +155,24 @@ namespace backend.Controllers
             return Ok(new { message = "File deleted successfully." });
         }
 
+        [HttpGet("{userId}/users")]
+        public async Task<IActionResult> GetFilesByUserId(int userId)
+        {
+            try
+            {
+                var files = await _repository.GetFilesByUserIdAsync(userId);
+                
+                if (files == null || !files.Any())
+                {
+                    return NotFound($"No files found for user {userId}");
+                }
+
+                return Ok(files);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
-
-
 }
