@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AutoMapper;
 using backend.Data.Repositories;
 using backend.Dtos;
@@ -21,10 +22,18 @@ namespace backend.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClientResponseDto>>> GetAll()
+        [HttpGet("user/{idUser}")]
+        public async Task<ActionResult<IEnumerable<ClientResponseDto>>> GetAllClientsByIdUser(int idUser)
         {
-            var clients = await _repository.GetAllAsync();
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int currentUserId))
+                return Unauthorized();
+
+            if (currentUserId != idUser)
+                return Forbid();
+
+            var clients = await _repository.GetClientsByUserIdAsync(idUser);
             var clientsDto = _mapper.Map<IEnumerable<ClientResponseDto>>(clients);
             return Ok(clientsDto);
         }
@@ -32,9 +41,16 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ClientRequestDto>> GetById(int id)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int currentUserId))
+                return Unauthorized();
+                
             var client = await _repository.GetByIdAsync(id);
             if (client == null)
                 return NotFound();
+
+            if (currentUserId != client.IdUser)
+                return Forbid();
 
             var clientDto = _mapper.Map<ClientRequestDto>(client);
             return Ok(clientDto);

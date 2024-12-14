@@ -10,6 +10,7 @@ import { AboutComponent } from './features/footer-pages/about/about.component';
 import { ContactComponent } from './features/footer-pages/contact/contact.component';
 import { TermsComponent } from './features/footer-pages/terms/terms.component';
 import { MainpageComponent } from './features/mainpage/mainpage.component';
+import { ClientsComponent } from './features/clients/pages/clients.component';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,11 @@ export const routes: Routes = [
       { 
         path: 'profile', 
         component: UserProfileComponent,
+        canActivate: [AuthGuard],
+      },
+      { 
+        path: 'clients', 
+        component: ClientsComponent,
         canActivate: [AuthGuard],
       },
       { path: 'about', component: AboutComponent },

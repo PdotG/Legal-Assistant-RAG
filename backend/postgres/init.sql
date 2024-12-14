@@ -33,6 +33,7 @@ CREATE TABLE embeddings (
 -- Table for Clients
 CREATE TABLE clients (
     id_client SERIAL PRIMARY KEY,
+    id_user INTEGER NOT NULL REFERENCES users(id_user) ON DELETE CASCADE,
     name TEXT NOT NULL,
     contact_information TEXT NOT NULL,
     address TEXT,

@@ -27,5 +27,12 @@ public class Client
     [Column("notes")]
     public string? Notes { get; set; }
 
+    [Required]
+    [Column("id_user")]
+    public int IdUser { get; set; }
+
+    [ForeignKey("IdUser")]
+    public required User User { get; set; }
+
     public ICollection<Case>? Cases { get; set; }
 }

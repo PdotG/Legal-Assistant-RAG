@@ -1,5 +1,4 @@
-<header
-  class="flex flex-col md:flex-row justify-between items-center p-1 md:p-2 bg-gradient-to-r from-blue-600 via-blue-800 to-purple-700 text-white shadow-lg">
+<header class="flex flex-col md:flex-row justify-between items-center p-1 md:p-2 bg-gradient-to-r from-blue-600 via-blue-800 to-purple-700 text-white shadow-lg">
   <div class="flex items-center space-x-3 text-lg md:text-xl font-bold mb-1 md:mb-0 ml-2">
     <!-- Logo container with refined dimensions and hover effect -->
     <a routerLink="/" class="hover:text-gray-200 transition-colors hover:scale-105 duration-300">
@@ -18,11 +17,14 @@
   </button>
 
   <nav class="w-full md:w-auto space-y-1 md:space-y-0 md:space-x-4 mb-2 md:mb-0 font-bold text-base">
-    <a routerLink="/documents"
-      class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105">Documents</a>
-    <a routerLink="/cases"
-      class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105">Cases</a>
-
+    <ng-container *ngIf="isLoggedIn$ | async">
+      <a routerLink="/documents"
+        class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105">Documents</a>
+      <a routerLink="/cases"
+        class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105">Cases</a>
+      <a routerLink="/clients"
+        class="block md:inline-block hover:text-gray-200 transition-colors duration-300 hover:scale-105">Clients</a>
+    </ng-container>
   </nav>
 
   <div class="flex flex-col md:flex-row space-y-1 md:space-y-0 md:space-x-3">
@@ -47,7 +49,6 @@
         (click)="logout()">
         Logout
       </button>
-
     </ng-template>
   </div>
 </header>
