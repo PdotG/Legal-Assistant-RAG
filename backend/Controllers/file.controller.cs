@@ -160,25 +160,25 @@ namespace backend.Controllers
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int currentUserId))
-            return Unauthorized();
+                return Unauthorized();
 
             if (currentUserId != requestedUserId)
-            return Forbid();
+                return Forbid();
 
             try
             {
-            var files = await _repository.GetFilesByUserIdAsync(requestedUserId);
+                var files = await _repository.GetFilesByUserIdAsync(requestedUserId);
 
-            if (files == null || !files.Any())
-            {
-                return NotFound($"No files found for user {requestedUserId}");
-            }
+                if (files == null || !files.Any())
+                {
+                    return Ok(new List<FileDto>());
+                }
 
-            return Ok(files);
+                return Ok(files);
             }
             catch (Exception ex)
             {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }
