@@ -17,20 +17,39 @@
         Transform your legal documents into actionable insights with our
         advanced AI technology.
       </p>
-      <div class="space-x-4">
-        <button
-          routerLink="/upload"
-          class="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transform hover:scale-105 transition-all duration-300"
-        >
-          Upload Document
-        </button>
-        <button
-          routerLink="/about"
-          class="border-2 border-white/30 text-white px-8 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 hover:border-white transform hover:scale-105 transition-all duration-300"
-        >
-          Learn More
-        </button>
-      </div>
+      <ng-container *ngIf="!(isLoggedIn$ | async); else loggedIn">
+        <div class="space-x-4">
+          <button
+            routerLink="/register"
+            class="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transform hover:scale-105 transition-all duration-300"
+          >
+            Register Now
+          </button>
+          <button
+            routerLink="/about"
+            class="border-2 border-white/30 text-white px-8 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 hover:border-white transform hover:scale-105 transition-all duration-300"
+          >
+            Learn More
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-template #loggedIn>
+        <div class="space-x-4">
+          <button
+            routerLink="/documents"
+            class="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transform hover:scale-105 transition-all duration-300"
+          >
+            Upload a Document
+          </button>
+          <button
+            routerLink="/about"
+            class="border-2 border-white/30 text-white px-8 py-3 rounded-lg backdrop-blur-sm hover:bg-white/10 hover:border-white transform hover:scale-105 transition-all duration-300"
+          >
+            Learn More
+          </button>
+        </div>
+      </ng-template>
     </div>
     <div class="lg:w-1/2 relative group">
       <div
