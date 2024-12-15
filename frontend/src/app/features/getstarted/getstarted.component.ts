@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-getstarted',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './getstarted.component.html',
-  styleUrl: './getstarted.component.css'
+  styleUrl: './getstarted.component.css',
 })
-export class GetstartedComponent {
-
-}
+export class GetstartedComponent {}
