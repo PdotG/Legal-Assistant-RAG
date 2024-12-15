@@ -79,8 +79,16 @@ namespace backend.Controllers
             var existingUser = await _repository.GetByIdAsync(id);
             if (existingUser == null)
                 return NotFound();
-            
-            userDto.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
+
+            if (!string.IsNullOrEmpty(userDto.Password) && userDto.Password != existingUser.Password)
+            {
+                userDto.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
+            }
+            else
+            {
+                userDto.Password = existingUser.Password; // Mantener la contraseña actual si no se proporciona una nueva o si es la misma
+            }
+
             _mapper.Map(userDto, existingUser);
             await _repository.UpdateAsync(existingUser);
 

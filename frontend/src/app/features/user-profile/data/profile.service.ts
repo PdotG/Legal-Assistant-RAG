@@ -6,7 +6,7 @@ import { LoginService } from '../../login/data/login.service';
 import { Profile } from './profile';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private apiUrl = environment.apiUrl;
@@ -23,5 +23,10 @@ export class UserService {
     return this.http.put<any>(`${this.apiUrl}/api/users/${userId}`, user);
   }
 
-
+  verifyPassword(email: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/auth/verify-password`, {
+      email,
+      password,
+    });
+  }
 }

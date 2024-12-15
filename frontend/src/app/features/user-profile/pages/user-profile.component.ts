@@ -20,6 +20,8 @@ export class UserProfileComponent implements OnInit {
   };
   newPassword: string = '';
   showPassword: boolean = false;
+  currentPassword: string = '';
+  showCurrentPassword: boolean = false;
 
   constructor(private userService: UserService, private router: Router, private dialogService: DialogService) {}
 
@@ -31,16 +33,27 @@ export class UserProfileComponent implements OnInit {
 
   async onSubmit(form: any): Promise<void> {
     if (form.valid) {
-      const updatedUser = { ...this.user };
-      if (this.newPassword) {
-        updatedUser.password = this.newPassword;
-      }
-      this.userService.updateUserProfile(updatedUser).subscribe(async response => {
-        await this.dialogService.showInfo('Profile updated successfully');
-        this.router.navigate(['/profile']);
-      }, async error => {
-        await this.dialogService.showError('Error updating profile ' + error);
-      });
+      this.userService.verifyPassword(this.user.email, this.currentPassword).subscribe(
+        async (response) => {
+          const updatedUser = { ...this.user };
+          if (this.newPassword) {
+            updatedUser.password = this.newPassword;
+          } else {
+            updatedUser.password = this.currentPassword;
+          }
+          this.userService.updateUserProfile(updatedUser).subscribe(async response => {
+            await this.dialogService.showInfo('Profile updated successfully');
+            this.router.navigate(['/profile']);
+          }, async error => {
+            const errorMessage = error.error?.message || 'Error updating profile';
+            await this.dialogService.showError(errorMessage);
+          });
+        },
+        async (error) => {
+          const errorMessage = error.error?.message || 'Current password is incorrect';
+          await this.dialogService.showError(errorMessage);
+        }
+      );
     }
   }
 }

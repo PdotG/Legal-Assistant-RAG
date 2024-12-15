@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using BCrypt.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
@@ -16,7 +17,7 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IUserRepository _userRepository; // Asegúrate de tener una interfaz IUserRepository
+        private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
@@ -37,7 +38,7 @@ namespace backend.Controllers
             if (user == null)
                 return Unauthorized(new { message = "Credenciales inválidas." });
 
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password);
+            bool isPasswordValid = VerifyPassword(loginRequest.Password, user.Password);
             if (!isPasswordValid)
                 return Unauthorized(new { message = "Credenciales inválidas." });
 
@@ -53,6 +54,29 @@ namespace backend.Controllers
             return Ok(response);
         }
 
+        [HttpPost("verify-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> VerifyPassword([FromBody] VerifyPasswordRequest verifyPasswordRequest)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _userRepository.GetUserByEmailAsync(verifyPasswordRequest.Email);
+            if (user == null)
+                return Unauthorized(new { message = "Usuario no encontrado." });
+
+            bool isPasswordValid = VerifyPassword(verifyPasswordRequest.Password, user.Password);
+            if (!isPasswordValid)
+                return Unauthorized(new { message = "Contraseña incorrecta." });
+
+            return Ok(new { message = "Contraseña correcta." });
+        }
+
+        private bool VerifyPassword(string enteredPassword, string storedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(enteredPassword, storedPassword);
+        }
+
         private string GenerateJwtToken(User user)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
@@ -61,6 +85,10 @@ namespace backend.Controllers
             var audience = jwtSettings.GetValue<string>("Audience");
             var expiryInMinutes = jwtSettings.GetValue<int>("ExpiryInMinutes");
 
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                throw new ArgumentNullException(nameof(secretKey), "Secret key cannot be null or empty.");
+            }
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
