@@ -7,6 +7,7 @@ import { DialogService } from '../../../shared/ui/dialog/data/dialog.service';
 import { LoginService } from '../../login/data/login.service';
 import { Client } from '../data/client';
 import { CreateClientModalComponent } from '../../create-client-modal/pages/create-client-modal.component';
+import { EditClientModalComponent } from '../../edit-client-modal/pages/edit-client-modal.component';
 
 @Component({
   selector: 'app-clients',
@@ -74,17 +75,17 @@ export class ClientsComponent implements OnInit {
   }
 
   async editClient(client: Client): Promise<void> {
-    // Implementar diálogo de edición con Material Dialog
-    // const dialogRef = this.dialog.open(EditClientDialogComponent, {
-    //   width: '500px',
-    //   data: client
-    // });
+    const dialogRef = this.dialog.open(EditClientModalComponent, {
+      maxWidth: '60rem',
+      hasBackdrop: true,
+      data: { client: client }
+    });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.loadClients();
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadClients();
+      }
+    });
   }
 
   async deleteClient(idClient: number): Promise<void> {
