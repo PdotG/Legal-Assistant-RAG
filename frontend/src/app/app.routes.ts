@@ -11,6 +11,7 @@ import { ContactComponent } from './features/footer-pages/contact/contact.compon
 import { TermsComponent } from './features/footer-pages/terms/terms.component';
 import { MainpageComponent } from './features/mainpage/mainpage.component';
 import { ClientsComponent } from './features/clients/pages/clients.component';
+import { GetstartedComponent } from './features/getstarted/getstarted.component';
 
 export const routes: Routes = [
   {
@@ -25,19 +26,20 @@ export const routes: Routes = [
         component: DocumentsComponent,
         canActivate: [AuthGuard],
       },
-      { 
-        path: 'profile', 
+      {
+        path: 'profile',
         component: UserProfileComponent,
         canActivate: [AuthGuard],
       },
-      { 
-        path: 'clients', 
+      {
+        path: 'clients',
         component: ClientsComponent,
         canActivate: [AuthGuard],
       },
       { path: 'about', component: AboutComponent },
       { path: 'contact', component: ContactComponent },
       { path: 'terms', component: TermsComponent },
+      { path: 'getstarted', component: GetstartedComponent },
     ],
   },
   {
