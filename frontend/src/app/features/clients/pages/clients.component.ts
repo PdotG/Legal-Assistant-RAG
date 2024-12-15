@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClientService } from '../data/client.service';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from '../../../shared/ui/dialog/data/dialog.service';
 import { LoginService } from '../../login/data/login.service';
 import { Client } from '../data/client';
+import { CreateClientModalComponent } from '../../create-client-modal/pages/create-client-modal.component';
 
 @Component({
   selector: 'app-clients',
@@ -21,8 +23,9 @@ export class ClientsComponent implements OnInit {
 
   constructor(
     private clientService: ClientService,
-    private dialogService: DialogService,
-    private authService: LoginService
+    private authService: LoginService,
+    private dialog: MatDialog,
+    private dialogService: DialogService
   ) {
     const userId = this.authService.getIdUserLoggedIn();
     this.currentUserId = userId !== null ? parseInt(userId, 10) : 0;
@@ -38,8 +41,7 @@ export class ClientsComponent implements OnInit {
       this.clients = (await this.clientService.getAllClientsByIdUser(this.currentUserId).toPromise()) || [];
       this.filteredClients = [...this.clients];
     } catch (error) {
-      console.error('Error loading clients:', error);
-      // Aquí podrías implementar un servicio de notificaciones
+      await this.dialogService.showError('Error loading clients');
     } finally {
       this.loading = false;
     }
@@ -58,17 +60,17 @@ export class ClientsComponent implements OnInit {
   }
 
   async openCreateDialog(): Promise<void> {
-    // Implementar diálogo de creación con Material Dialog
-    // const dialogRef = this.dialog.open(CreateClientDialogComponent, {
-    //   width: '500px',
-    //   data: { userId: this.currentUserId }
-    // });
+    const dialogRef = this.dialog.open(CreateClientModalComponent, {
+      maxWidth: '60rem',
+      hasBackdrop: true,
+      data: { userId: this.currentUserId }
+    });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.loadClients();
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadClients();
+      }
+    });
   }
 
   async editClient(client: Client): Promise<void> {
