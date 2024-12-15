@@ -83,12 +83,15 @@ export class DocumentsComponent implements OnInit {
       });
   }
 
-  deleteDocument(name: string): void {
+  async deleteDocument(name: string): Promise<void> {
+    const confirmed = await this.dialogService.showConfirm('Are you sure you want to delete this client?');
+    if (!confirmed) return;
     this.fileService.deleteFile(name).subscribe({
       next: () => {
-        this.documents = this.documents.filter((doc) => doc.name !== name);
+        this.loadDocuments();
+        this.dialogService.showInfo('Document has been deleted succesfully');
       },
-      error: (error) => console.error('Error deleting document:', error),
+      error: (error) => this.dialogService.showError('Error deleting document'),
     });
   }
 
