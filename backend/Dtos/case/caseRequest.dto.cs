@@ -7,6 +7,6 @@ namespace backend.Dtos
         public string Status { get; set; } = "Open";
         public DateTime? CourtDate { get; set; }
         public required int ClientId { get; set; }
-        public int? AssignedUserId { get; set; }
+        public required int AssignedUserId { get; set; }
     }
 }
