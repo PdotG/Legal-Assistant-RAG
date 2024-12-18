@@ -7,12 +7,13 @@ import { DialogService } from '../../../shared/ui/dialog/data/dialog.service';
 import { LoginService } from '../../login/data/login.service';
 import { Case } from '../data/case';
 import { CreateCaseModalComponent } from '../../create-case-modal/pages/create-case-modal.component';
+import { EditCaseModalComponent } from '../../edit-case-modal/pages/edit-case-modal.component';
 
 @Component({
   selector: 'app-cases',
   imports: [CommonModule, FormsModule],
   templateUrl: './cases.component.html',
-  styleUrl: './cases.component.css'
+  styleUrl: './cases.component.css',
 })
 export class CasesComponent implements OnInit {
   cases: Case[] = [];
@@ -38,7 +39,10 @@ export class CasesComponent implements OnInit {
   async loadCases(): Promise<void> {
     try {
       this.loading = true;
-      this.cases = (await this.caseService.getAllCasesByIdUser(this.currentUserId).toPromise()) || [];
+      this.cases =
+        (await this.caseService
+          .getAllCasesByIdUser(this.currentUserId)
+          .toPromise()) || [];
       this.filteredCases = [...this.cases];
     } catch (error) {
       await this.dialogService.showError('Error al cargar los casos');
@@ -53,16 +57,19 @@ export class CasesComponent implements OnInit {
       return;
     }
 
-    this.filteredCases = this.cases.filter(caso =>
-      caso.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      caso.description?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      caso.client.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    this.filteredCases = this.cases.filter(
+      (caso) =>
+        caso.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        caso.description
+          ?.toLowerCase()
+          .includes(this.searchTerm.toLowerCase()) ||
+        caso.client.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
   async openCreateDialog(): Promise<void> {
     const dialogRef = this.dialog.open(CreateCaseModalComponent, {
-      width: '600px'
+      width: '600px',
     });
 
     const result = await dialogRef.afterClosed().toPromise();
@@ -71,17 +78,27 @@ export class CasesComponent implements OnInit {
     }
   }
 
-  async editCase(caso: Case): Promise<void> {
-    // Por implementar: abrir modal para editar caso
+  async editCase(idCase: number, idClient: number): Promise<void> {
+    const dialogRef = this.dialog.open(EditCaseModalComponent, {
+      width: '600px',
+      data: { caseId: idCase, idClient: idClient },
+    });
+
+    const result = await dialogRef.afterClosed().toPromise();
+    if (result) {
+      await this.loadCases();
+    }
   }
 
   async deleteCase(idCase: number): Promise<void> {
-    const confirmed = await this.dialogService.showConfirm('¿Está seguro de que desea eliminar este caso?');
+    const confirmed = await this.dialogService.showConfirm(
+      '¿Está seguro de que desea eliminar este caso?'
+    );
     if (!confirmed) return;
 
     try {
       await this.caseService.deleteCase(idCase).toPromise();
-      this.cases = this.cases.filter(c => c.idCase !== idCase);
+      this.cases = this.cases.filter((c) => c.idCase !== idCase);
       this.filterCases();
       await this.dialogService.showInfo('Caso eliminado correctamente');
     } catch (error) {

@@ -4,8 +4,9 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ClientService } from '../../clients/data/client.service';
 import { DialogService } from '../../../shared/ui/dialog/data/dialog.service';
-import { CaseRequestDto, ClientSummaryDto, UserSummaryDto } from '../data/create-case-modal.interfaces';
-import { UserService } from '../../user-profile/data/profile.service';
+import { CaseRequestDto, ClientSummaryDto } from '../data/create-case-modal.interfaces';
+import { LoginService } from '../../login/data/login.service';
+import { CaseService } from '../../cases/data/case.service';
 
 @Component({
   selector: 'app-create-case-modal',
@@ -27,48 +28,43 @@ export class CreateCaseModalComponent implements OnInit {
   };
 
   clients: ClientSummaryDto[] = [];
-  users: UserSummaryDto[] = [];
 
   constructor(
     private clientService: ClientService,
-    private userService: UserService, // Inyecta el servicio de usuarios
+    private authService: LoginService,
+    private caseService: CaseService,
     private dialogService: DialogService,
     public dialogRef: MatDialogRef<CreateCaseModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { userId: number }
-  ) { }
+  ) { 
+    const userId = this.authService.getIdUserLoggedIn();
+    this.case.assignedUserId = userId !== null ? parseInt(userId, 10) : 0;
+  }
 
   ngOnInit(): void {
     this.loadClients();
-    this.loadUsers(); // Carga los usuarios al inicializar
   }
 
   async loadClients(): Promise<void> {
     try {
-      const clients = await this.clientService.getAllClientsByIdUser(1).toPromise();
+      const clients = await this.clientService.getAllClientsByIdUser(this.case.assignedUserId).toPromise();
       this.clients = clients ?? [];
     } catch (error) {
       await this.dialogService.showError('Error loading clients');
     }
   }
 
-  async loadUsers(): Promise<void> {
-    // try {
-    //   const users = await this.userService.getUsers().toPromise();
-    //   this.users = users ?? [];
-    // } catch (error) {
-    //   await this.dialogService.showError('Error loading users');
-    // }
-  }
-
   async onSubmit(form: NgForm): Promise<void> {
     if (form.valid) {
-      // try {
-      //   await this.clientService.createCase(this.case).toPromise();
-      //   this.dialogRef.close(true);
-      //   await this.dialogService.showInfo('Case created successfully');
-      // } catch (error) {
-      //   await this.dialogService.showError('Error creating case');
-      // }
+      try {
+        this.case.courtDate = this.case.courtDate ? new Date(this.case.courtDate).toISOString() : undefined;
+        await this.caseService.createCase(this.case).toPromise();
+        this.dialogRef.close(true);
+        await this.dialogService.showInfo('Case created successfully');
+      } catch (error) {
+        await this.dialogService.showError('Error creating case');
+        console.log(error);
+      }
     }
   }
 

@@ -39,7 +39,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClientRequestDto>> GetById(int id)
+        public async Task<ActionResult<ClientResponseDto>> GetById(int id)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int currentUserId))
@@ -52,7 +52,7 @@ namespace backend.Controllers
             if (currentUserId != client.IdUser)
                 return Forbid();
 
-            var clientDto = _mapper.Map<ClientRequestDto>(client);
+            var clientDto = _mapper.Map<ClientResponseDto>(client);
             return Ok(clientDto);
         }
 
