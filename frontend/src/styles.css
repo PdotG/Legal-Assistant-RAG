@@ -6,8 +6,13 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 
-.mat-dialog-container {
-  @apply p-0 bg-transparent shadow-none;
+.custom-dialog-container .mat-mdc-dialog-surface {
+  background-color: transparent !important;
+}
+
+/* Alternative if above doesn't work */
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: transparent !important;
 }
 
 .backdrop-blur-sm {
@@ -17,3 +22,4 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 .cdk-overlay-dark-backdrop {
   @apply bg-black/50;
 }
+

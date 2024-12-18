@@ -70,6 +70,7 @@ export class CasesComponent implements OnInit {
   async openCreateDialog(): Promise<void> {
     const dialogRef = this.dialog.open(CreateCaseModalComponent, {
       width: '600px',
+      panelClass: ['custom-dialog-container', 'mat-dialog']
     });
 
     const result = await dialogRef.afterClosed().toPromise();
@@ -82,6 +83,7 @@ export class CasesComponent implements OnInit {
     const dialogRef = this.dialog.open(EditCaseModalComponent, {
       width: '600px',
       data: { caseId: idCase, idClient: idClient },
+      panelClass: ['custom-dialog-container', 'mat-dialog']
     });
 
     const result = await dialogRef.afterClosed().toPromise();
