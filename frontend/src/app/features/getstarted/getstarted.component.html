@@ -1,22 +1,29 @@
-<div class="container mx-auto px-4 py-12 min-h-screen bg-transparent">
-  <!-- Hero Section -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
-    <div class="flex flex-col justify-center space-y-6">
-      <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+<div class="bg-gray-800/50 min-h-screen p-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl font-bold text-gray-100 mb-6">
         Get Started with
         <span
-          class="text-blue-400 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600"
-          >Legal Assistant</span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500"
         >
+          Legal Assistant
+        </span>
       </h1>
-      <!-- Added subtitle and features list -->
-      <h2 class="text-2xl text-blue-300 font-semibold">
-        AI-Powered Legal Document Analysis
-      </h2>
-      <ul class="space-y-3">
-        <li class="flex items-center text-gray-300">
+      <p class="text-xl text-gray-300 mb-8">
+        AI-Powered Legal Document Analysis at Your Fingertips
+      </p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      <!-- Feature 1 -->
+      <div
+        class="bg-gray-700/50 rounded-lg shadow-lg p-6 transform hover:scale-105 transition duration-300"
+      >
+        <div class="flex items-center mb-4">
           <svg
-            class="w-6 h-6 mr-2 text-blue-400"
+            class="w-8 h-8 text-blue-400 mr-3"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -28,11 +35,20 @@
               d="M5 13l4 4L19 7"
             ></path>
           </svg>
-          Instant Document Analysis
-        </li>
-        <li class="flex items-center text-gray-300">
+          <h3 class="text-xl font-semibold text-gray-100">Instant Analysis</h3>
+        </div>
+        <p class="text-gray-300">
+          Real-time document processing and analysis with advanced AI technology
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div
+        class="bg-gray-700/50 rounded-lg shadow-lg p-6 transform hover:scale-105 transition duration-300"
+      >
+        <div class="flex items-center mb-4">
           <svg
-            class="w-6 h-6 mr-2 text-blue-400"
+            class="w-8 h-8 text-blue-400 mr-3"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -44,11 +60,20 @@
               d="M5 13l4 4L19 7"
             ></path>
           </svg>
-          24/7 Legal Support
-        </li>
-        <li class="flex items-center text-gray-300">
+          <h3 class="text-xl font-semibold text-gray-100">24/7 Support</h3>
+        </div>
+        <p class="text-gray-300">
+          Round-the-clock AI-powered legal assistance and support
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div
+        class="bg-gray-700/50 rounded-lg shadow-lg p-6 transform hover:scale-105 transition duration-300"
+      >
+        <div class="flex items-center mb-4">
           <svg
-            class="w-6 h-6 mr-2 text-blue-400"
+            class="w-8 h-8 text-blue-400 mr-3"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -60,140 +85,22 @@
               d="M5 13l4 4L19 7"
             ></path>
           </svg>
-          Secure Document Storage
-        </li>
-      </ul>
-      <p class="text-xl text-gray-300 mb-8 leading-relaxed">
-        Your intelligent companion for legal document management and analysis
-      </p>
-      <div class="flex gap-4"></div>
-    </div>
-    <!-- Modified image container -->
-    <div class="flex items-center justify-center">
-      <div class="relative w-full">
-        <img
-          [src]="'images/lawstatue.jpg'"
-          alt="Get Started"
-          class="w-full h-[600px] object-cover rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-500 border-2 border-gray-700"
-        />
-        <div
-          class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent rounded-2xl"
-        ></div>
+          <h3 class="text-xl font-semibold text-gray-100">Secure Storage</h3>
+        </div>
+        <p class="text-gray-300">
+          Enterprise-grade security for all your legal documents
+        </p>
       </div>
     </div>
-  </div>
 
-  <!-- Bento Grid Features -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
-    <!-- Feature Card 1 -->
-    <div
-      class="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-700 hover:scale-105 flex flex-col h-full group"
-    >
-      <div
-        class="bg-blue-900/50 p-4 rounded-xl w-fit mb-6 ring-2 ring-blue-500/50 group-hover:ring-blue-400 transition-all"
-      >
-        <svg
-          class="w-8 h-8 text-blue-400 group-hover:text-blue-300"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-          ></path>
-        </svg>
-      </div>
-      <h3 class="text-2xl font-bold mb-4 text-white group-hover:text-blue-300">
-        Easy Setup
-      </h3>
-      <p class="text-gray-300 text-lg group-hover:text-white">
-        Get started in minutes with our intuitive setup process
-      </p>
-    </div>
-
-    <!-- Feature Card 2 -->
-    <div
-      class="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-700 hover:scale-105 flex flex-col h-full group"
-    >
-      <div
-        class="bg-green-900/50 p-4 rounded-xl w-fit mb-6 ring-2 ring-green-500/50 group-hover:ring-green-400 transition-all"
-      >
-        <svg
-          class="w-8 h-8 text-green-400 group-hover:text-green-300"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M13 10V3L4 14h7v7l9-11h-7z"
-          ></path>
-        </svg>
-      </div>
-      <h3 class="text-2xl font-bold mb-4 text-white group-hover:text-green-300">
-        Powerful Features
-      </h3>
-      <p class="text-gray-300 text-lg group-hover:text-white">
-        Access advanced legal analysis tools and document management features
-      </p>
-    </div>
-
-    <!-- Feature Card 3 -->
-    <div
-      class="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-700 hover:scale-105 flex flex-col h-full group"
-    >
-      <div
-        class="bg-purple-900/50 p-4 rounded-xl w-fit mb-6 ring-2 ring-purple-500/50 group-hover:ring-purple-400 transition-all"
-      >
-        <svg
-          class="w-8 h-8 text-purple-400 group-hover:text-purple-300"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-          ></path>
-        </svg>
-      </div>
-      <h3
-        class="text-2xl font-bold mb-4 text-white group-hover:text-purple-300"
-      >
-        Secure & Private
-      </h3>
-      <p class="text-gray-300 text-lg group-hover:text-white">
-        Your documents are protected with enterprise-grade security
-      </p>
-    </div>
-  </div>
-
-  <!-- Call to Action -->
-  <div class="mt-20 text-center mb-14">
-    <h2 class="text-4xl font-bold mb-8 text-white bg-clip-text">
-      Ready to Transform Your Legal Work?
-    </h2>
-    <div class="flex gap-6 justify-center">
+    <!-- CTA Section -->
+    <div class="text-center">
       <button
         routerLink="/register"
-        class="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold py-4 px-10 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+        class="bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105"
       >
-        Start Now
+        Get Started Now
       </button>
     </div>
-    <p class="mt-6 text-gray-400 text-lg italic">
-      Because let's face it, reading legal documents is about as fun as watching
-      paint dry... Let us help make it less painful! 😉
-    </p>
-    <p class="text-sm text-gray-500 mt-2">
-      *No lawyers were harmed in the making of this assistant
-    </p>
   </div>
 </div>
