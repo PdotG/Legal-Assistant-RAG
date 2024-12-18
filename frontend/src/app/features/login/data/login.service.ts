@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { isPlatformBrowser } from '@angular/common';
+import { TokenTimerService } from './token-timer.service';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -15,7 +17,8 @@ export class LoginService {
 
   constructor(
     private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private tokenTimerService: TokenTimerService
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.isLoggedInSubject.next(this.hasToken());
@@ -33,16 +36,21 @@ export class LoginService {
         tap((response) => {
           if (response.token && isPlatformBrowser(this.platformId)) {
             localStorage.setItem('token', response.token);
-            this.isLoggedInSubject.next(true); // Emitir que el usuario está logueado
+            this.isLoggedInSubject.next(true);
+
+            const payload = JSON.parse(atob(response.token.split('.')[1]));
+            const expirationTime = payload.exp * 1000 - Date.now(); 
+            this.tokenTimerService.startLogoutTimer(expirationTime);
           }
         })
       );
   }
 
   logout(): void {
+    this.tokenTimerService.clearLogoutTimer();
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('token');
-      this.isLoggedInSubject.next(false); // Emitir que el usuario ha cerrado sesión
+      this.isLoggedInSubject.next(false);
     }
   }
 
