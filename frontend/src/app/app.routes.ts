@@ -12,6 +12,7 @@ import { TermsComponent } from './features/footer-pages/terms/terms.component';
 import { MainpageComponent } from './features/mainpage/mainpage.component';
 import { ClientsComponent } from './features/clients/pages/clients.component';
 import { GetstartedComponent } from './features/getstarted/getstarted.component';
+import { CasesComponent } from './features/cases/pages/cases.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,11 @@ export const routes: Routes = [
       {
         path: 'clients',
         component: ClientsComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'cases',
+        component: CasesComponent,
         canActivate: [AuthGuard],
       },
       { path: 'about', component: AboutComponent },

@@ -1,0 +1,134 @@
+<div class="bg-gray-800 p-6 shadow-xl w-full max-w-4xl border-0 border-transparent">
+    <h2 class="text-2xl font-bold mb-8 text-white">Create New Case</h2>
+
+    <form #caseForm="ngForm" (ngSubmit)="onSubmit(caseForm)" class="space-y-4">
+      <!-- Title Field -->
+      <div>
+        <label class="block text-white text-sm mb-2" for="title">
+          Title <span class="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          [(ngModel)]="case.title"
+          #titleInput="ngModel"
+          class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-400"
+          placeholder="Enter case title"
+          required
+        />
+        <span
+          *ngIf="titleInput.invalid && (titleInput.dirty || titleInput.touched)"
+          class="text-red-500 text-xs mt-1"
+        >
+          Title is required
+        </span>
+      </div>
+
+      <!-- Description Field -->
+      <div>
+        <label class="block text-white text-sm mb-2" for="description"
+          >Description</label
+        >
+        <textarea
+          id="description"
+          name="description"
+          [(ngModel)]="case.description"
+          rows="4"
+          class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-400 resize-none"
+          placeholder="Enter case description"
+        >
+        </textarea>
+      </div>
+
+      <!-- Client Selection Field -->
+      <div>
+        <label class="block text-white text-sm mb-2" for="client">
+          Client <span class="text-red-500">*</span>
+        </label>
+        <select
+          id="client"
+          name="clientId"
+          [(ngModel)]="case.clientId"
+          #clientInput="ngModel"
+          class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          required
+        >
+          <option value="" disabled selected>Select a client</option>
+          <option *ngFor="let client of clients" [value]="client.idClient">
+            {{ client.idClient }} - {{ client.name }}
+          </option>
+        </select>
+        <span
+          *ngIf="
+            clientInput.invalid && (clientInput.dirty || clientInput.touched)
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          Client selection is required
+        </span>
+      </div>
+
+      <!-- Status Field -->
+      <div>
+        <label class="block text-white text-sm mb-2" for="status">
+          Status <span class="text-red-500">*</span>
+        </label>
+        <select
+          id="status"
+          name="status"
+          [(ngModel)]="case.status"
+          #statusInput="ngModel"
+          class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          required
+        >
+          <option value="Open">Open</option>
+          <option value="Open">Pending</option>
+          <option value="Closed">Closed</option>
+        </select>
+        <span
+          *ngIf="
+            statusInput.invalid && (statusInput.dirty || statusInput.touched)
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          Status is required
+        </span>
+      </div>
+
+      <!-- Assigned User Selection Field -->
+      <input type="hidden" name="assignedUserId" [(ngModel)]="case.assignedUserId" />
+
+      <!-- Court Date Field -->
+      <div>
+        <label class="block text-white text-sm mb-2" for="courtDate">
+          Court Date
+        </label>
+        <input
+          type="datetime-local"
+          id="courtDate"
+          name="courtDate"
+          [(ngModel)]="case.courtDate"
+          class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-400"
+        />
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex space-x-4 pt-4">
+        <button
+          type="button"
+          (click)="onCancel()"
+          class="w-1/2 bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-600 transition-colors duration-200"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="!caseForm.valid"
+          class="w-1/2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  </div>

@@ -11,10 +11,10 @@
           <h1
             class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
           >
-            Clients Management
+            Case Management
           </h1>
           <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-            Manage your client portfolio efficiently
+            Manage your cases efficiently
           </p>
         </div>
         <button
@@ -34,7 +34,7 @@
               d="M12 4v16m8-8H4"
             />
           </svg>
-          Add New Client
+          Add New Case
         </button>
       </div>
     </div>
@@ -48,9 +48,9 @@
           <input
             type="text"
             [(ngModel)]="searchTerm"
-            (input)="filterClients()"
+            (input)="filterCases()"
             class="block w-full pl-12 pr-4 py-3 border-0 rounded-xl bg-gray-50 dark:bg-slate-700 text-white focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
-            placeholder="Search clients..."
+            placeholder="Search cases..."
           />
           <div
             class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
@@ -73,22 +73,22 @@
       </div>
     </div>
 
-    <!-- Bento Grid for Clients -->
+    <!-- Bento Grid for Cases -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div
-        *ngFor="let client of filteredClients"
+        *ngFor="let caso of filteredCases"
         class="backdrop-blur-md bg-white/80 dark:bg-slate-800/80 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 group"
       >
         <div class="p-6">
           <div class="flex items-center justify-between">
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-              {{ client.name }}
+              {{ caso.title }}
             </h3>
             <div
               class="flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             >
               <button
-                (click)="editClient(client)"
+                (click)="editCase(caso.idCase, caso.client.idClient)"
                 class="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-900/50 transition-colors duration-300"
               >
                 <svg
@@ -106,7 +106,7 @@
                 </svg>
               </button>
               <button
-                (click)="deleteClient(client.idClient)"
+                (click)="deleteCase(caso.idCase)"
                 class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors duration-300"
               >
                 <svg
@@ -127,32 +127,25 @@
           </div>
           <div class="mt-4 space-y-3">
             <p class="text-sm text-gray-700 dark:text-gray-300">
-              <span class="font-medium">Client ID:</span>
-              {{ client.idClient }}
+              <span class="font-medium">Description:</span>
+              {{ caso.description }}
             </p>
             <p class="text-sm text-gray-700 dark:text-gray-300">
-              <span class="font-medium">Contact:</span>
-              {{ client.contactInformation }}
+              <span class="font-medium">Status:</span>
+              {{ caso.status }}
             </p>
             <p
-              *ngIf="client.address"
+              *ngIf="caso.courtDate"
               class="text-sm text-gray-700 dark:text-gray-300"
             >
-              <span class="font-medium">Address:</span> {{ client.address }}
+              <span class="font-medium">Court Date:</span>
+              {{ caso.courtDate | date:'short' }}
             </p>
-            <p
-              *ngIf="client.notes"
-              class="text-sm text-gray-700 dark:text-gray-300"
-            >
-              <span class="font-medium">Notes:</span> {{ client.notes }}
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              <span class="font-medium">Client:</span>
+              {{ caso.client.name }}
             </p>
-            <div *ngIf="client.cases?.length" class="mt-4">
-              <span
-                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-green-500 to-emerald-500 text-white"
-              >
-                {{ client.cases?.length }} Cases
-              </span>
-            </div>
+            <!-- Add additional relevant fields for cases -->
           </div>
         </div>
       </div>
@@ -160,7 +153,7 @@
 
     <!-- Empty State with Glass Effect -->
     <div
-      *ngIf="filteredClients.length === 0"
+      *ngIf="filteredCases.length === 0"
       class="backdrop-blur-md bg-white/80 dark:bg-slate-800/80 rounded-2xl shadow-lg p-12 text-center"
     >
       <svg
@@ -177,10 +170,10 @@
         />
       </svg>
       <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">
-        No clients found
+        No cases found
       </h3>
       <p class="mt-2 text-gray-500 dark:text-gray-400">
-        Get started by creating a new client.
+        Start by creating a new case.
       </p>
     </div>
   </div>

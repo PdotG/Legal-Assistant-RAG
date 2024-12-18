@@ -1,4 +1,3 @@
-
 using System.Security.Claims;
 using AutoMapper;
 using backend.Data.Repositories;
@@ -35,14 +34,30 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CaseRequestDto>> GetById(int id)
+        public async Task<ActionResult<CaseResponseDto>> GetById(int id)
         {
             var caseObj = await _repository.GetByIdAsync(id);
             if (caseObj == null)
                 return NotFound();
 
-            var caseDto = _mapper.Map<CaseRequestDto>(caseObj);
+            var caseDto = _mapper.Map<CaseResponseDto>(caseObj);
             return Ok(caseDto);
+        }
+
+        [HttpGet("user/{idUser}")]
+        public async Task<ActionResult<IEnumerable<CaseResponseDto>>> GetAllCasesByIdUser(int idUser)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int currentUserId))
+                return Unauthorized();
+
+            if (currentUserId != idUser)
+                return Forbid();
+
+            var cases = await _repository.GetAllCasesForAUserIdAsync(idUser);
+            var casesDto = _mapper.Map<IEnumerable<CaseResponseDto>>(cases);
+            return Ok(casesDto);
         }
 
         [HttpPost]
