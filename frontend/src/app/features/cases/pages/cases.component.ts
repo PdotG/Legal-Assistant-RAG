@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from '../../../shared/ui/dialog/data/dialog.service';
 import { LoginService } from '../../login/data/login.service';
 import { Case } from '../data/case';
+import { CreateCaseModalComponent } from '../../create-case-modal/pages/create-case-modal.component';
 
 @Component({
   selector: 'app-cases',
@@ -60,7 +61,14 @@ export class CasesComponent implements OnInit {
   }
 
   async openCreateDialog(): Promise<void> {
-    // Por implementar: abrir modal para crear caso
+    const dialogRef = this.dialog.open(CreateCaseModalComponent, {
+      width: '600px'
+    });
+
+    const result = await dialogRef.afterClosed().toPromise();
+    if (result) {
+      await this.loadCases();
+    }
   }
 
   async editCase(caso: Case): Promise<void> {
