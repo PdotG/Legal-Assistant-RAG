@@ -1,27 +1,36 @@
-# Stage 1: Build Angular app
-FROM node:lts-alpine AS build
+# We use Node LTS version
+FROM node:22-alpine as build-angular
 
-# Set working directory
-WORKDIR /app
+# We set the working directory
+WORKDIR /build
 
-# Copy package files and install dependencies
-COPY package.json package-lock.json ./
+# We copy the package.json and package-lock.json files to build them with npm later
+COPY package*.json ./
+
+# Install the dependencies
 RUN npm install
 
-# Copy source code
+# We copy the src/ code to the container
 COPY . .
 
-# Define build arguments and use them during the build
-ARG API_KEY
-ARG CONFIGURATION=production
-ENV API_KEY=$API_KEY
-ENV CONFIGURATION=$CONFIGURATION
+# We verify dependencies and build the Angular app
+RUN npm install
+RUN npm run build
 
-RUN npm run build -- --configuration=$CONFIGURATION --define apiKey=\"$API_KEY\" --define configuration=\"$CONFIGURATION\"
+# We use Caddy Reverse Proxy to launch Angular to production
+FROM caddy:latest
 
-# Stage 2: Serve the app using Nginx
-FROM nginx:alpine
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/dist /usr/share/nginx/html
+
+WORKDIR /app
+
+# We copy our project to the ./www directory of Caddy
+COPY --from=build-angular /build/dist/frontend/browser ./www
+
+# Copy the Caddyfile configuration to the container
+COPY Caddyfile /etc/caddy/Caddyfile
+
 
 EXPOSE 80
+
+# We start Caddy with this configuration
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]

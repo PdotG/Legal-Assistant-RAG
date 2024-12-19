@@ -1,0 +1,31 @@
+{
+   # Global configuration
+}
+
+# Angular app server configuration block:
+:80 {
+    root * ./www
+    file_server
+
+    handle_path /api/* {
+        reverse_proxy {$API_URL} {
+            header_up Host {upstream_hostport}
+        }
+    }
+
+    handle_path /telemetry/* {
+        reverse_proxy {$TELEMETRY_COLLECTOR_URL} {
+            header_up Host {upstream_hostport}
+            header_up X-API-KEY {$TELEMETRY_API_KEY}
+        }
+    }
+
+    
+    @notFound {
+        not path /api/*
+        not path /telemetry/*
+        not file {path}
+    }
+
+    rewrite @notFound /index.html
+}

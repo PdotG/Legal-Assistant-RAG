@@ -44,7 +44,7 @@ export class ChatService {
             const chunks = newContent.split('\n\n')
               .filter((chunk: string) => chunk.startsWith('data: '))
               .map((chunk: string) => chunk.replace('data: ', ''))
-              .map((chunk: string) => chunk.replace(/(?<!\d)(\d)/g, ' $1'));
+              .map((chunk: string) => chunk.replace(/([a-zA-Z])(\d)/g, '$1 $2').replace(/(\d)([a-zA-Z])/g, '$1 $2'));
 
             chunks.forEach((chunk: string) => {
               if (chunk === '[DONE]') {
