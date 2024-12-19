@@ -68,8 +68,11 @@ namespace backend.Controllers
                 {
                     if (update.ContentUpdate.Count > 0)
                     {
-                        // Envía cada fragmento al cliente
+                        // Formatea el texto antes de enviarlo
                         string chunk = update.ContentUpdate[0].Text;
+                        chunk = System.Text.RegularExpressions.Regex.Replace(chunk, @"([a-zA-Z])(\d)", "$1 $2");
+                        chunk = System.Text.RegularExpressions.Regex.Replace(chunk, @"(\d)([a-zA-Z])", "$1 $2");
+                        
                         await Response.WriteAsync($"data: {chunk}\n\n");
                         await Response.Body.FlushAsync();
                     }
