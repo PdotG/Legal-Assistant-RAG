@@ -1,0 +1,78 @@
+<div
+  class="fixed inset-0 bg-gray-900/75 backdrop-blur-sm flex justify-center items-center z-50 transition-all duration-300"
+  *ngIf="isVisible"
+>
+  <div
+    class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md flex flex-col transform transition-all scale-100"
+  >
+    <!-- Header -->
+    <div
+      class="flex justify-between items-center p-5 border-b border-gray-200 dark:border-gray-700"
+    >
+      <h2 class="text-xl font-bold text-gray-800 dark:text-white">Chat</h2>
+      <button
+        class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-200"
+        (click)="closeModal()"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Chat Messages -->
+    <div
+      #messagesContainer
+      class="flex-1 max-h-[500px] overflow-y-auto p-5 space-y-4 bg-gray-50 dark:bg-black/50"
+    >
+      <div
+        *ngFor="let message of messages"
+        class="flex flex-col text-white space-y-2"
+      >
+        <div
+          class="p-4 rounded-2xl max-w-[80%] shadow-sm transition-all duration-200"
+          [ngClass]="{
+            'bg-gray-200 dark:bg-gray-700 text-white dark:text-gray-200 mx-auto':
+              message.sender === 'system',
+            'bg-blue-500 text-white ml-auto': message.sender === 'user',
+            'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 mr-auto':
+              message.sender === 'bot'
+          }"
+        >
+          {{ message.text }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Input -->
+    <div class="p-5 border-t border-gray-200 dark:border-gray-700">
+      <div
+        class="flex items-center space-x-3 bg-gray-50 dark:bg-gray-900 rounded-lg p-2"
+      >
+        <input
+          [(ngModel)]="newMessage"
+          (keyup.enter)="sendMessage()"
+          class="flex-1 px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white transition-all duration-200"
+          type="text"
+          placeholder="Escribe un mensaje..."
+        />
+        <button
+          (click)="sendMessage()"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors duration-200 font-medium shadow-lg hover:shadow-xl"
+        >
+          Enviar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

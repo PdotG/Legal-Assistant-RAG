@@ -34,13 +34,8 @@ namespace backend.Data.Repositories
                 new NpgsqlParameter("@created_at", embedding.CreatedAt)
             };
 
-            await using var connection = (NpgsqlConnection)_context.Database.GetDbConnection();
-            await connection.OpenAsync();
 
-            await using var command = new NpgsqlCommand(sql, connection);
-            command.Parameters.AddRange(parameters);
-
-            await command.ExecuteNonQueryAsync();
+            await _context.Database.ExecuteSqlRawAsync(sql, parameters);
         }
 
         // Método para recuperar Embeddings por id de archivo
@@ -95,13 +90,13 @@ namespace backend.Data.Repositories
 
             // Consulta a la base de datos para encontrar los embeddings más cercanos
             var sql = @"
-    SELECT 
-        embeddings.plain_text,
-        1 - (embeddings.embedding <=> (@embedding::vector)) AS cosine_similarity
-    FROM embeddings
-    WHERE id_file = @fileId
-    ORDER BY cosine_similarity DESC
-    LIMIT @limit";
+                SELECT 
+                    embeddings.plain_text,
+                    1 - (embeddings.embedding <=> (@embedding::vector)) AS cosine_similarity
+                FROM embeddings
+                WHERE id_file = @fileId
+                ORDER BY cosine_similarity DESC
+                LIMIT @limit";
 
             var parameters = new[]
             {

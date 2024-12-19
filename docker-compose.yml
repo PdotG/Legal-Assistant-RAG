@@ -13,6 +13,29 @@ services:
       - ./backend/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres-data:/var/lib/postgresql/data
 
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - API_URL=${API_URL:-http://localhost:3000}
+    ports:
+      - "4200:80"
+    environment:
+      - API_URL=${API_URL:-http://localhost:3000}
+      - CONFIGURATION=production
+      - API_KEY=YOUR_PRODUCTION_API_KEY
+  backend:
+      build:
+        context: ./backend
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Production
+        - ConnectionStrings__DefaultConnection=Host=lar-db;Database=postgres;Username=postgres;Password=postgres
+      depends_on:
+        - lar-db
 volumes:
   postgres-data:
     driver: local
+    

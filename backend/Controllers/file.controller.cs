@@ -1,4 +1,3 @@
-
 using AutoMapper;
 using backend.Data.Repositories;
 using backend.Dtos;
@@ -45,6 +44,33 @@ namespace backend.Controllers
             return Ok(fileDto);
         }
 
+        [HttpGet("download/{id}")]
+        public async Task<IActionResult> DownloadFile(int id)
+        {
+            // Verificar la autenticación del usuario
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                return Unauthorized();
+
+            // Obtener el archivo desde el repositorio
+            var file = await _repository.GetByIdAsync(id);
+            if (file == null || file.UserId != userId)
+                return NotFound(new { message = "Archivo no encontrado o sin permiso para acceder." });
+
+            // Verificar que el archivo exista en el sistema de archivos
+            if (!System.IO.File.Exists(file.FilePath))
+                return NotFound(new { message = "El archivo no existe en el servidor." });
+
+            // Leer el archivo y retornarlo como un FileResult
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, "application/pdf", file.Name);
+        }
+
         [HttpPost]
         public async Task<IActionResult> UploadFile([FromForm] FileUploadDto fileUploadDto)
         {
@@ -78,17 +104,17 @@ namespace backend.Controllers
 
                 await _pdfHelper.ProcessPdfAsync(filePath, fileEntity.Id); // Procesar el archivo PDF
 
-                return Ok(new 
-                { 
-                    fileEntity.Id, 
-                    fileEntity.Name, 
-                    fileEntity.FilePath, 
-                    fileEntity.ScrapedAt 
+                return Ok(new
+                {
+                    fileEntity.Id,
+                    fileEntity.Name,
+                    fileEntity.FilePath,
+                    fileEntity.ScrapedAt
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocurrió un error al subir el archivo: " +ex);
+                return StatusCode(500, "Ocurrió un error al subir el archivo: " + ex);
             }
         }
 
@@ -98,7 +124,7 @@ namespace backend.Controllers
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
                 return Unauthorized();
-            
+
             var files = await _repository.GetFilesByUserIdAsync(userId);
             var file = files.FirstOrDefault(f => f.Name == name);
 
@@ -129,7 +155,31 @@ namespace backend.Controllers
             return Ok(new { message = "File deleted successfully." });
         }
 
+        [HttpGet("user/{requestedUserId}")]
+        public async Task<IActionResult> GetFilesByUserId(int requestedUserId)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int currentUserId))
+                return Unauthorized();
+
+            if (currentUserId != requestedUserId)
+                return Forbid();
+
+            try
+            {
+                var files = await _repository.GetFilesByUserIdAsync(requestedUserId);
+
+                if (files == null || !files.Any())
+                {
+                    return Ok(new List<FileDto>());
+                }
+
+                return Ok(files);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
-
-
 }

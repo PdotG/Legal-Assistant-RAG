@@ -1,0 +1,100 @@
+<div
+  class="bg-gray-800 p-6 rounded-xl shadow-xl w-[600px] min-h-[500px] max-h-[80vh] overflow-y-auto"
+>
+  <h2 class="text-2xl font-bold mb-8 text-white">Edit Client</h2>
+
+  <form
+    #clientForm="ngForm"
+    (ngSubmit)="onSubmit(clientForm)"
+    class="space-y-4"
+  >
+    <!-- Name Field -->
+    <div>
+      <label class="block text-white text-sm mb-2" for="name">
+        Name <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        [(ngModel)]="client.name"
+        #nameInput="ngModel"
+        class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-400"
+        required
+      />
+      <span
+        *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)"
+        class="text-red-500 text-xs mt-1"
+      >
+        Name is required
+      </span>
+    </div>
+
+    <!-- Contact Information Field -->
+    <div>
+      <label class="block text-white text-sm mb-2" for="contactInformation">
+        Contact Information <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="text"
+        id="contactInformation"
+        name="contactInformation"
+        [(ngModel)]="client.contactInformation"
+        #contactInput="ngModel"
+        class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-400"
+        required
+      />
+      <span
+        *ngIf="
+          contactInput.invalid && (contactInput.dirty || contactInput.touched)
+        "
+        class="text-red-500 text-xs mt-1"
+      >
+        Contact information is required
+      </span>
+    </div>
+
+    <!-- Address Field -->
+    <div>
+      <label class="block text-white text-sm mb-2" for="address">Address</label>
+      <input
+        type="text"
+        id="address"
+        name="address"
+        [(ngModel)]="client.address"
+        class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-400"
+      />
+    </div>
+
+    <!-- Notes Field -->
+    <div>
+      <label class="block text-white text-sm mb-2" for="notes">Notes</label>
+      <textarea
+        id="notes"
+        name="notes"
+        [(ngModel)]="client.notes"
+        rows="4"
+        class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-400 resize-none"
+      >
+      </textarea>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex space-x-4 pt-4">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="w-1/2 bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-600 transition-colors duration-200"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="!clientForm.valid"
+        class="w-1/2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Update
+      </button>
+    </div>
+  </form>
+</div>

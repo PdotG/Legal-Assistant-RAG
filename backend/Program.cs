@@ -50,10 +50,22 @@ builder.Services.AddSingleton(sp => new OpenAIClient(builder.Configuration["Open
 builder.Services.AddAutoMapper(typeof(Program));
 
 // Registrar filtros globales
-// builder.Services.AddControllers(options =>
-// {
-//     options.Filters.Add<GlobalExceptionFilter>(); // Registro del filtro personalizado
-// });
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>(); // Registro del filtro personalizado
+});
+
+// Agregar servicio CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -108,6 +120,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 
+app.UseCors("AllowAll");
 // Agregar autenticación y autorización
 app.UseAuthentication();
 app.UseAuthorization();
