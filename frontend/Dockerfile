@@ -1,36 +1,32 @@
-# We use Node LTS version
+# Build stage
 FROM node:22-alpine as build-angular
 
-# We set the working directory
+# Set working directory
 WORKDIR /build
 
-# We copy the package.json and package-lock.json files to build them with npm later
+# Copy package files
 COPY package*.json ./
 
-# Install the dependencies
+# Install dependencies
 RUN npm install
 
-# We copy the src/ code to the container
+# Copy source code
 COPY . .
 
-# We verify dependencies and build the Angular app
-RUN npm install
+# Build the Angular app
 RUN npm run build
 
-# We use Caddy Reverse Proxy to launch Angular to production
-FROM caddy:latest
+# Production stage
+FROM nginx:alpine
 
+# Copy built Angular app
+COPY --from=build-angular /build/dist/frontend/browser /usr/share/nginx/html
 
-WORKDIR /app
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# We copy our project to the ./www directory of Caddy
-COPY --from=build-angular /build/dist/frontend/browser ./www
-
-# Copy the Caddyfile configuration to the container
-COPY Caddyfile /etc/caddy/Caddyfile
-
-
+# Expose port 80
 EXPOSE 80
 
-# We start Caddy with this configuration
-CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

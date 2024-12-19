@@ -35,7 +35,11 @@ services:
         - ConnectionStrings__DefaultConnection=Host=lar-db;Database=postgres;Username=postgres;Password=postgres
       depends_on:
         - lar-db
+      volumes:
+        - pdf-data:/app/Uploads
 volumes:
   postgres-data:
+    driver: local
+  pdf-data:
     driver: local
     
