@@ -24,8 +24,8 @@ export class DocumentsComponent implements OnInit {
   selectedFileName: string | null = null;
 
   isChatModalVisible = false;
-  // Documento seleccionado para el chat
   activeDocument: FileUploadDto | undefined = undefined;
+  isUploading = false;
 
   constructor(
     private fileService: FileService,
@@ -61,30 +61,32 @@ export class DocumentsComponent implements OnInit {
       return;
     }
 
+    this.isUploading = true;
     this.fileService
       .uploadFile(this.selectedFile, this.selectedFile.name)
       .subscribe({
         next: (response) => {
           this.dialogService.showInfo('File uploaded successfully');
           this.loadDocuments();
-          // Clear file input managing DOM directly
           const fileInput = document.querySelector('#file') as HTMLInputElement;
           if (fileInput) fileInput.value = '';
-          // Reset file selection state
           this.selectedFile = null;
           this.selectedFileName = null;
-          // Reset form
           form.resetForm();
+          this.isUploading = false;
         },
         error: (error) => {
           console.error('Error uploading file:', error);
           this.dialogService.showError('Error uploading file');
+          this.isUploading = false;
         },
       });
   }
 
   async deleteDocument(name: string): Promise<void> {
-    const confirmed = await this.dialogService.showConfirm('Are you sure you want to delete this client?');
+    const confirmed = await this.dialogService.showConfirm(
+      'Are you sure you want to delete this client?'
+    );
     if (!confirmed) return;
     this.fileService.deleteFile(name).subscribe({
       next: () => {
@@ -95,18 +97,15 @@ export class DocumentsComponent implements OnInit {
     });
   }
 
-  // Método para abrir el modal de chat
   openChat(document: FileUploadDto): void {
     this.activeDocument = document;
     this.isChatModalVisible = true;
 
-    // Resetea el chat cada vez que se abre
     if (this.chatModal) {
-      this.chatModal.resetChat(); // Llama al método de reinicio del chat
+      this.chatModal.resetChat();
     }
   }
 
-  // Método para cerrar el modal de chat
   closeChat(): void {
     this.isChatModalVisible = false;
     this.activeDocument = undefined;
