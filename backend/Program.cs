@@ -26,7 +26,6 @@ else
     Console.WriteLine($"Cadena de conexión encontrada: {connectionString}");
 }
 
-var corsOriginUrl = builder.Configuration["CORS_ORIGIN_URL"];
 
 // Registrar servicios
 builder.Services.AddDbContext<MyDbContext>(options =>

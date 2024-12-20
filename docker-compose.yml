@@ -23,7 +23,7 @@ services:
       - "4200:80"
     environment:
       - NODE_ENV=production
- 
+
 
   backend:
       build:
@@ -31,8 +31,6 @@ services:
         dockerfile: Dockerfile
       ports:
         - "3000:3000"
-      environment:
-        - CORS_ORIGIN_URL=*
       depends_on:
         - lar-db
       volumes:
@@ -42,4 +40,4 @@ volumes:
     driver: local
   pdf-data:
     driver: local
-    
+
