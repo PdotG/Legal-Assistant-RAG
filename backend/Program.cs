@@ -26,6 +26,8 @@ else
     Console.WriteLine($"Cadena de conexión encontrada: {connectionString}");
 }
 
+var corsOriginUrl = builder.Configuration["CORS_ORIGIN_URL"];
+
 // Registrar servicios
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -55,16 +57,18 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<GlobalExceptionFilter>(); // Registro del filtro personalizado
 });
 
-// Agregar servicio CORS
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
 });
+
 
 builder.Services.AddControllers();
 

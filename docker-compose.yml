@@ -17,13 +17,14 @@ services:
     build:
       context: ./frontend
       args:
-        - API_URL=${API_URL:-http://localhost:3000}
+        - API_URL=http://localhost:3000
+        - CONFIGURATION=production
     ports:
       - "4200:80"
     environment:
-      - API_URL=${API_URL:-http://localhost:3000}
-      - CONFIGURATION=production
-      - API_KEY=YOUR_PRODUCTION_API_KEY
+      - NODE_ENV=production
+ 
+
   backend:
       build:
         context: ./backend
@@ -31,8 +32,7 @@ services:
       ports:
         - "3000:3000"
       environment:
-        - ASPNETCORE_ENVIRONMENT=Production
-        - ConnectionStrings__DefaultConnection=Host=lar-db;Database=postgres;Username=postgres;Password=postgres
+        - CORS_ORIGIN_URL=*
       depends_on:
         - lar-db
       volumes:

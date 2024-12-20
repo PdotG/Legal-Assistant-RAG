@@ -1,4 +1,7 @@
+declare const apiUrl: string;
+declare const configuration: 'development' | 'production';
+
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000',
+  apiUrl,
+  configuration,
 };

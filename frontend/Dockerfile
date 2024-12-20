@@ -13,8 +13,12 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Build the Angular app
-RUN npm run build
+ARG API_URL
+ARG CONFIGURATION=production
+ENV API_URL=$API_URL
+
+# Build the Angular app with the variables
+RUN npm run build -- --configuration=$CONFIGURATION --define apiUrl=\"$API_URL\" --define configuration=\"$CONFIGURATION\"
 
 # Production stage
 FROM nginx:alpine
