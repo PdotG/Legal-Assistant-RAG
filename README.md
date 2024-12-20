@@ -30,9 +30,9 @@ The project utilizes a diverse set of technologies to achieve its goals:
 
 - **Frontend**: Angular 19, HTML, TailwindCSS, TypeScript
 - **Backend**: .NET 8.0, C#
-- **Containerization**: Docker
 - **AI** : OpenAI-API with 4o-mini model for testing
 - **Databases**: PostgreSQL, PgVector Plugin for vectorial DB
+- **Containerization**: Docker and Docker-Compose
 
 ## Installation Guide
 
@@ -42,10 +42,10 @@ To set up the Legal Assistant RAG application locally, follow these steps:
 
 Ensure you have the following installed on your system:
 
-- Node.js (v14.x or later)
-- Angular CLI (v12.x or later)
-- .NET Core SDK (v5.x or later)
-- Docker (v20.x or later)
+- Node.js (v22.12.0 LTS or later)
+- Angular CLI (v19 or later)
+- .NET Core SDK (v8.0 or later)
+- Docker (v27 or later)
 - Git
 
 ### Steps
@@ -60,32 +60,40 @@ Ensure you have the following installed on your system:
 
 Navigate to the backend directory and restore the dependencies:
 
-    ```bash
+   ```bash
     cd backend
-    dotnet restore
     dotnet build
-    ```
+   ```
 Run the backend server:
-    ```bash
-        dotnet run
-        Frontend Setup
-    ```
+   ```bash
+    dotnet run
+    Frontend Setup
+   ```
 
 3. **Frontend Setup**
 
 Navigate to the frontend directory, install the dependencies, and start the Angular development server:
 
-    ```bash
+   ```bash
     cd ../frontend
     npm install
     ng serve
-    ```
-Docker Setup (Optional)
+   ```
+4. **Docker Setup (Optional)**
 
-If you prefer to run the application in a Docker container, build and run the Docker images:
+If you prefer to run the application in a Docker container first you need to change the environment variable to the URL of the backend:
 
+```bash
+API_URL=http://localhost:3000
+   ```
+Then you can build and run the Docker images using docker-compose:
+
+```bash
 docker-compose up --build
-Usage
+   ```
+
+## Usage
+
 Access the application by navigating to http://localhost:4200 in your web browser. You can log in using your credentials and start managing your legal documents and cases.
 
 ## Contributing
