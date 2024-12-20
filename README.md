@@ -30,7 +30,7 @@ The project utilizes a diverse set of technologies to achieve its goals:
 
 - **Frontend**: Angular 19, HTML, TailwindCSS, TypeScript
 - **Backend**: .NET 8.0, C#
-- **AI** : OpenAI-API with 4o-mini model for testing
+- **AI** : OpenAI-API with 4o-mini model
 - **Databases**: PostgreSQL, PgVector Plugin for vectorial DB
 - **Containerization**: Docker and Docker-Compose
 
@@ -64,7 +64,40 @@ Navigate to the backend directory and restore the dependencies:
     cd backend
     dotnet build
    ```
-Run the backend server:
+Next, configure the appsettings.json file with your environment-specific values. Below is an example:
+
+```javascript
+{
+  "Kestrel": {
+    "Endpoints": {
+      "Http": {
+        "Url": "http://0.0.0.0:3000"
+      }
+    }
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "WebApiDatabase": "Host=your-host;Port=5432;Database=your-database;Username=your-username;Password=your-password"
+  },
+  "Jwt": {
+    "Key": "your-secure-secret-key",
+    "Issuer": "http://localhost:3000",
+    "Audience": "http://localhost:3000",
+    "ExpiryInMinutes": 60
+  },
+  "OpenAI": {
+    "OPENAI_API_KEY": "your-openai-api-key"
+  },
+  "AllowedHosts": "*"
+}
+```
+
+After updating the appsettings.json file, you can run the backend server:
    ```bash
     dotnet run
    ```

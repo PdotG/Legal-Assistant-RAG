@@ -16,17 +16,6 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 
 var connectionString = builder.Configuration.GetConnectionString("WebApiDatabase");
 
-if (string.IsNullOrEmpty(connectionString))
-{
-    Console.WriteLine("Error: No se encontró la cadena de conexión.");
-    return;
-}
-else
-{
-    Console.WriteLine($"Cadena de conexión encontrada: {connectionString}");
-}
-
-
 // Registrar servicios
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -50,10 +39,9 @@ builder.Services.AddSingleton(sp => new OpenAIClient(builder.Configuration["Open
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-// Registrar filtros globales
 builder.Services.AddControllers(options =>
 {
-    options.Filters.Add<GlobalExceptionFilter>(); // Registro del filtro personalizado
+    options.Filters.Add<GlobalExceptionFilter>();
 });
 
 
@@ -73,12 +61,10 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
-// Configuring JWT Authentication
-var jwtKey = builder.Configuration["Jwt:Key"]; // JWT Key
-var jwtIssuer = builder.Configuration["Jwt:Issuer"]; // JWT Issuer
-var jwtAudience = builder.Configuration["Jwt:Audience"]; // JWT Audience
+var jwtKey = builder.Configuration["Jwt:Key"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
 
-// Check if the JWT config values are missing
 if (string.IsNullOrEmpty(jwtKey) || string.IsNullOrEmpty(jwtIssuer) || string.IsNullOrEmpty(jwtAudience))
 {
     throw new InvalidOperationException("JWT configuration values are missing");
@@ -105,26 +91,21 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// Agregar Logging
+// Logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
-// Build the web application
 var app = builder.Build();
 
-// Configure the HTTP Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
 
-//app.UseHttpsRedirection();
-
 app.UseRouting();
 
 app.UseCors("AllowAll");
-// Agregar autenticación y autorización
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -144,5 +125,4 @@ catch (Exception ex)
     Console.WriteLine($"Error al conectar con la base de datos: {ex.Message}");
 }
 
-// Start the application
 app.Run("http://localhost:3000");
