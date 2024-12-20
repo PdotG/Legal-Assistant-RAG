@@ -14,11 +14,11 @@ Legal Assistant RAG is a comprehensive web application designed to assist legal 
 
 ## Project Overview
 
-The Legal Assistant RAG project aims to streamline legal workflows by providing tools for document processing, case monitoring, and client documentation. This application implements a **Retrieval Augmented Generation (RAG)** approach, utilizing legal PDF documents to provide users with contextually relevant information and assistance. By leveraging modern web technologies like Angular and Tailwind, Legal Assistant RAG delivers a responsive and intuitive user experience, ensuring legal practitioners can focus on their core tasks understanding complex legal texts and effectively performing their work—without being bogged down by administrative overhead. This means the system can analyze uploaded PDF laws and provide insights, summaries, and answers to queries based on the content of those documents, directly aiding in legal research and analysis.
+The Legal Assistant RAG project aims to streamline legal workflows by providing tools for document processing, case monitoring, and client documentation. This application implements a **Retrieval Augmented Generation (RAG)** approach, utilizing legal PDF documents to provide users with contextually relevant information and assistance. By leveraging modern web technologies like Angular and TailwindCSS, Legal Assistant RAG delivers a responsive and intuitive user experience. This means the system can analyze uploaded PDF laws and provide insights, summaries, and answers to queries based on the content of those documents, directly aiding in legal research and analysis. The system is also capable of managing clients and cases a common work in legal operations.
 
 ## Features
 
-- **Document Management**: Efficiently upload, store, and retrieve legal documents.
+- **Document Management**: Efficiently upload, store, and retrieve legal documents providing AI-powered insights based on them.
 - **Case Tracking**: Track the progress of legal cases with detailed status updates.
 - **Client Monitoring**: Facilitate secure storing of legal clients.
 - **User Authentication**: Secure login and user management.
