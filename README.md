@@ -14,7 +14,7 @@ Legal Assistant RAG is a comprehensive web application designed to assist legal 
 
 ## Project Overview
 
-The Legal Assistant RAG project aims to streamline legal workflows by providing tools for document processing, case monitoring, and client documentation. The application leverages modern web technologies like Angular or Tailwind to deliver a responsive and intuitive user experience, ensuring legal practitioners can focus on their core tasks without being bogged down by administrative overhead.
+The Legal Assistant RAG project aims to streamline legal workflows by providing tools for document processing, case monitoring, and client documentation. This application implements a **Retrieval Augmented Generation (RAG)** approach, utilizing legal PDF documents to provide users with contextually relevant information and assistance. By leveraging modern web technologies like Angular and Tailwind, Legal Assistant RAG delivers a responsive and intuitive user experience, ensuring legal practitioners can focus on their core tasks understanding complex legal texts and effectively performing their work—without being bogged down by administrative overhead. This means the system can analyze uploaded PDF laws and provide insights, summaries, and answers to queries based on the content of those documents, directly aiding in legal research and analysis.
 
 ## Features
 
@@ -67,7 +67,6 @@ Navigate to the backend directory and restore the dependencies:
 Run the backend server:
    ```bash
     dotnet run
-    Frontend Setup
    ```
 
 3. **Frontend Setup**
@@ -96,8 +95,14 @@ docker-compose up --build
 
 Access the application by navigating to http://localhost:4200 in your web browser. You can log in using your credentials and start managing your legal documents and cases.
 
-## Contributing
-We welcome contributions from the community. To contribute, please fork the repository, create a new branch for your feature or bug fix, and submit a pull request for review.
-
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
+
+
+## Credits
+
+We'd like to acknowledge the following GitHub users for their contributions:
+
+* **<a href="https://github.com/kevinxe" target="_blank">Kevin Sánchez</a>**
+* **<a href="https://github.com/MoreCircless" target="_blank">Morcircles</a>**
+* **<a href="https://github.com/PdotG" target="_blank">Pablo García</a>**
