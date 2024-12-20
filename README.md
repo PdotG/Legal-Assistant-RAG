@@ -104,5 +104,5 @@ This project is licensed under the MIT License. See the LICENSE file for details
 We'd like to acknowledge the following GitHub users for their contributions:
 
 * **<a href="https://github.com/kevinxe" target="_blank">Kevin Sánchez</a>**
-* **<a href="https://github.com/MoreCircless" target="_blank">Morcircles</a>**
+* **<a href="https://github.com/MoreCircless" target="_blank">Manuel Abril</a>**
 * **<a href="https://github.com/PdotG" target="_blank">Pablo García</a>**
