@@ -17,7 +17,7 @@ namespace backend.Helpers
         private readonly EmbeddingRepository _repository;
         private readonly EmbeddingClient _embeddingClient;
         private const int BatchSize = 100;
-        private const int ChunkSize = 1000; // Tamaño máximo por chunk
+        private const int ChunkSize = 1000;
 
         public PdfHelper(OpenAIClient openAiClient, EmbeddingRepository repository, IConfiguration configuration)
         {
@@ -47,7 +47,6 @@ namespace backend.Helpers
                 }
             }
 
-            // Process chunks in batches
             for (int i = 0; i < chunks.Count; i += BatchSize)
             {
                 var batchChunks = chunks.Skip(i).Take(BatchSize).ToList();

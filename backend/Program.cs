@@ -11,12 +11,10 @@ using OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Verificar la carga de la configuración
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 var connectionString = builder.Configuration.GetConnectionString("WebApiDatabase");
 
-// Registrar servicios
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -91,7 +89,6 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// Logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();

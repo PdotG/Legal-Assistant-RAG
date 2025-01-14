@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService } from '../data/login.service'; // Asegúrate de que la ruta sea correcta
+import { LoginService } from '../data/login.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Login } from '../data/login';

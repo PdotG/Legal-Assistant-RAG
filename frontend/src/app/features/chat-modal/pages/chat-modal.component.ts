@@ -19,15 +19,13 @@ import { ChatService } from '../data/chat.service';
   styleUrl: './chat-modal.component.css',
 })
 export class ChatModalComponent {
-  @Input() isVisible = false; // Controla la visibilidad del modal
+  @Input() isVisible = false;
   @Input() document?: FileUploadDto;
-  @Output() closeModalEvent = new EventEmitter<void>(); // Evento para cerrar el modal
+  @Output() closeModalEvent = new EventEmitter<void>();
   @ViewChild('messagesContainer') messagesContainer!: ElementRef;
 
-  // Lista de mensajes del chat
   messages: { text: string; sender: 'system' | 'user' | 'bot' }[] = [];
 
-  // Mensaje que se escribe en el input
   newMessage: string = '';
   isLoading = false;
   currentBotMessage: string = '';
@@ -40,13 +38,11 @@ export class ChatModalComponent {
     }
   }
 
-  // Método para cerrar el modal
   closeModal() {
     this.resetChat();
     this.closeModalEvent.emit();
   }
 
-  // Método para enviar un mensaje
   sendMessage() {
     if (this.newMessage.trim() && this.document?.id) {
       const userMessage = this.newMessage.trim();
@@ -98,7 +94,7 @@ export class ChatModalComponent {
       setTimeout(() => {
         const nativeElement = this.messagesContainer.nativeElement;
         nativeElement.scrollTop = nativeElement.scrollHeight;
-      }, 0); // Retraso ligero para esperar la actualización del DOM
+      }, 0); 
     }
   }
 }

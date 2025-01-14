@@ -41,14 +41,14 @@ export class EditCaseModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { caseId: number, idClient: number }
   ) { 
     this.caseId = data.caseId;
-    this.case.clientId = data.idClient; // Asignar idClient recibido
+    this.case.clientId = data.idClient;
     const userId = Number(this.authService.getIdUserLoggedIn());
-    this.case.assignedUserId = userId; // Asegurar que se asigna correctamente
+    this.case.assignedUserId = userId;
   }
 
   ngOnInit(): void {
     this.loadCase();
-    this.clientName$ = this.getClientName(this.case.clientId); // Obtener nombre del cliente usando idClient
+    this.clientName$ = this.getClientName(this.case.clientId);
   }
 
   getClientName(id: number): Observable<string> {
@@ -56,7 +56,7 @@ export class EditCaseModalComponent implements OnInit {
       return of('Unknown (ID: N/A)');
     }
     return this.clientService.getClientById(id).pipe(
-      map(client => `${client.idClient} - ${client.name}`), // Concatenar nombre e ID
+      map(client => `${client.idClient} - ${client.name}`),
       catchError(error => {
         this.dialogService.showError('Error fetching client name');
         console.log(error);
@@ -65,7 +65,6 @@ export class EditCaseModalComponent implements OnInit {
     );
   }
 
-  // Agregar método para formatear la fecha
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     const pad = (n: number) => n < 10 ? '0' + n : n;
@@ -85,11 +84,10 @@ export class EditCaseModalComponent implements OnInit {
           title: caseData.title,
           description: caseData.description,
           status: caseData.status,
-          courtDate: this.case.clientId && caseData.courtDate ? this.formatDate(caseData.courtDate) : undefined, // Formatear la fecha
-          clientId: this.case.clientId, // Mantener idClient asignado desde data
-          assignedUserId: this.case.assignedUserId // Mantener assignedUserId asignado desde el constructor
+          courtDate: this.case.clientId && caseData.courtDate ? this.formatDate(caseData.courtDate) : undefined,
+          clientId: this.case.clientId,
+          assignedUserId: this.case.assignedUserId 
         };
-        // Asignar la fecha formateada
         this.courtDateFormatted = this.case.courtDate;
       } else {
         await this.dialogService.showError('Case data is undefined');
@@ -102,7 +100,6 @@ export class EditCaseModalComponent implements OnInit {
   async onSubmit(form: NgForm): Promise<void> {
     if (form.valid) {
       try {
-        // Convertir la fecha formateada de vuelta a ISO string
         this.case.courtDate = this.courtDateFormatted ? new Date(this.courtDateFormatted).toISOString() : undefined;
         console.log(this.case);
         await this.caseService.updateCase(this.caseId, this.case).toPromise();

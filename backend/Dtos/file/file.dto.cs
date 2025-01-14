@@ -2,7 +2,7 @@ namespace backend.Dtos
 {
     public class FileDto
     {
-        public int Id { get; set; } // Assuming there's an Id property in the model
+        public int Id { get; set; }
 
         public required string Name { get; set; }
 

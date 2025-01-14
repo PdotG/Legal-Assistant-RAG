@@ -45,10 +45,9 @@ export class ChatService {
               .filter((chunk: string) => chunk.startsWith('data: '))
               .map((chunk: string) => chunk.replace('data: ', ''))
               .map((chunk: string) => {
-                // Agregar espacio entre letras y números en ambas direcciones
                 return chunk
-                  .replace(/([a-zA-Z])(\d)/g, '$1 $2')  // Letra seguida de número
-                  .replace(/(\d)([a-zA-Z])/g, '$1 $2'); // Número seguido de letra
+                  .replace(/([a-zA-Z])(\d)/g, '$1 $2') 
+                  .replace(/(\d)([a-zA-Z])/g, '$1 $2');
               });
 
             chunks.forEach((chunk: string) => {

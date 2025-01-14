@@ -38,7 +38,6 @@ namespace backend.Data.Repositories
             await _context.Database.ExecuteSqlRawAsync(sql, parameters);
         }
 
-        // Método para recuperar Embeddings por id de archivo
         public async Task<IEnumerable<Embedding>> GetEmbeddingsByFileIdAsync(int fileId)
         {
             var sql = @"
@@ -66,7 +65,7 @@ namespace backend.Data.Repositories
                 {
                     Id = reader.GetInt32(0),
                     FileId = reader.GetInt32(1),
-                    Vector = reader[2] as float[] ?? Array.Empty<float>(), // Vector como float[]
+                    Vector = reader[2] as float[] ?? Array.Empty<float>(),
                     ChunkIndex = reader.IsDBNull(3) ? null : reader.GetInt32(3),
                     PlainText = reader.IsDBNull(4) ? null : reader.GetString(4),
                     CreatedAt = reader.GetDateTime(5)
@@ -87,8 +86,6 @@ namespace backend.Data.Repositories
             var vectorizedContent = await _embeddingsHelper.GenerateEmbeddingsFromStringAsync(inputMessage);
             var embeddingVector = vectorizedContent.SelectMany(innerArray => innerArray).ToArray();
 
-
-            // Consulta a la base de datos para encontrar los embeddings más cercanos
             var sql = @"
                 SELECT 
                     embeddings.plain_text,

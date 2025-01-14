@@ -5,7 +5,6 @@ export interface Case {
   status: string;
   courtDate?: Date;
   client: ClientSummary;
-  // ...otros campos relevantes...
 }
 
 export interface ClientSummary {

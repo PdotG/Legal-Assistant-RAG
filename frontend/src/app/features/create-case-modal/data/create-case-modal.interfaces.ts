@@ -1,4 +1,3 @@
-// ...existing code...
 export interface CaseSummaryDto {
     idCase: number;
     title: string;
@@ -22,7 +21,7 @@ export interface CaseRequestDto {
     title: string;
     description?: string;
     status: string;
-    courtDate?: string; // Asegurar formato ISO con zona horaria
+    courtDate?: string;
     clientId: number;
     assignedUserId: number;
 }
@@ -43,4 +42,3 @@ export interface DocumentSummaryDto {
     title: string;
     uploadedDate: string;
 }
-// ...existing code...

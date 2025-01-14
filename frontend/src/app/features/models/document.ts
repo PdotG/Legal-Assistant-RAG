@@ -8,5 +8,4 @@ export interface Document {
   caseId: number;
   case?: Case;
   fileId: number;
-  // falta implementar backend.models.File ? File
 }

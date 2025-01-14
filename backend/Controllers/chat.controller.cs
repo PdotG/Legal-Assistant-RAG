@@ -40,12 +40,11 @@ namespace backend.Controllers
 
             try
             {
-                // Buscar los chunks relevantes en la base de datos
                 var sortedChunks = await _repository.SearchChunksAsync(request.Message, request.FileId);
 
                 if (sortedChunks.Count == 0)
                 {
-                    Response.StatusCode = 404; // Establecer código 404
+                    Response.StatusCode = 404;
                     await Response.Body.WriteAsync(System.Text.Encoding.UTF8.GetBytes("No se encontraron resultados relevantes.\n"));
                     return;
                 }
@@ -59,16 +58,13 @@ namespace backend.Controllers
                     ? $"Actúa como un asistente legal llamado Legal RAG Assistant. La pregunta es: {request.Message}. No se ha encontrado una respuesta adecuada en la información almacenada."
                     : $"Actúa como un asistente legal llamado Legal RAG Assistant. La pregunta es: {request.Message}. La respuesta: {answer}. Responde a la pregunta con la respuesta que se te ha proporcionado.";
 
-                // Llama al método de streaming de OpenAI
                 AsyncCollectionResult<StreamingChatCompletionUpdate> completionUpdates =
                     _chatClient.CompleteChatStreamingAsync(prompt);
 
-                // Itera a través de los fragmentos generados
                 await foreach (var update in completionUpdates)
                 {
                     if (update.ContentUpdate.Count > 0)
                     {
-                        // Formatea el texto antes de enviarlo
                         string chunk = update.ContentUpdate[0].Text;
                         chunk = System.Text.RegularExpressions.Regex.Replace(chunk, @"([a-zA-Z])(\d)", "$1 $2");
                         chunk = System.Text.RegularExpressions.Regex.Replace(chunk, @"(\d)([a-zA-Z])", "$1 $2");
