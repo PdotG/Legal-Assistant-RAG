@@ -72,6 +72,18 @@ namespace backend.Controllers
             return Ok(new { message = "Contraseña correcta." });
         }
 
+        [HttpGet("user-id")]
+        [Authorize]
+        public IActionResult GetUserId()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int currentUserId))
+                return Unauthorized();
+            
+            return Ok(new { userId = currentUserId });
+        }
+
         private bool VerifyPassword(string enteredPassword, string storedPassword)
         {
             return BCrypt.Net.BCrypt.Verify(enteredPassword, storedPassword);

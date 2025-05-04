@@ -38,13 +38,26 @@ namespace backend.Controllers
             return Ok(clientsDto);
         }
 
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<ClientResponseDto>>> GetAllClientsByCurrentUser()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int currentUserId))
+                return Unauthorized();
+
+            var clients = await _repository.GetClientsByUserIdAsync(currentUserId);
+            var clientsDto = _mapper.Map<IEnumerable<ClientResponseDto>>(clients);
+            return Ok(clientsDto);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ClientResponseDto>> GetById(int id)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int currentUserId))
                 return Unauthorized();
-                
+
             var client = await _repository.GetByIdAsync(id);
             if (client == null)
                 return NotFound();
@@ -90,7 +103,7 @@ namespace backend.Controllers
             var existingClient = await _repository.GetByIdAsync(id);
             if (existingClient == null)
                 return NotFound();
-            
+
             _mapper.Map(clientRequestDto, existingClient);
             await _repository.UpdateAsync(existingClient);
 
@@ -103,7 +116,7 @@ namespace backend.Controllers
             var client = await _repository.GetByIdAsync(id);
             if (client == null)
                 return NotFound();
-            
+
             await _repository.Delete(client);
             return NoContent();
         }
